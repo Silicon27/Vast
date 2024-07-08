@@ -1,4 +1,4 @@
-from tokenize import convert_to_token
+from tokenize_lexer import convert_to_token
 
 # Read the config file to get the file name
 with open("config.xvast") as config_file:
@@ -15,6 +15,7 @@ tokens = ["PRINT", "(", ")", '"', "'", 'CREATE']
 # Convert the source code to tokens
 interpret = convert_to_token(keywords, file, tokens)
 tokenized_output = list(interpret.tokenize())
+print(tokenized_output)
 
 # Global dictionary to store functions
 global functions
@@ -109,6 +110,14 @@ class Interpret:
         # update the global functions dictionary
         functions[function_name] = function_arguments
         print(f"Function created: {function_name} with arguments {function_arguments}")
+        #IMPORTANT: remember to update the create statement so that it stores the code inside the {} brackets too
+        if self.tokenized_output[self.position] == '{':
+            self.position += 1
+            while self.tokenized_output[self.position] != "{" and self.position < len(self.tokenized_output) and self.tokenized_output[self.position] != "}":
+
+                function_data: list = self.tokenized_output[self.position]
+                print("function: " + function_data)
+                self.position += 1
 
 # Create an instance of the Interpret class and run the interpreter
 interpreter = Interpret(tokenized_output)
