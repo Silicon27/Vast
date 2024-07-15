@@ -1,4 +1,7 @@
+import os
+
 from tokenize_lexer import convert_to_token
+
 
 # Read the config file to get the file name
 with open("config.xvast") as config_file:
@@ -9,8 +12,8 @@ with open("config.xvast") as config_file:
             file = runfile[1].strip()
 
 # Keywords and their corresponding tokens
-keywords = ["print", "(", ")", '"', "'", 'create']
-tokens = ["PRINT", "(", ")", '"', "'", 'CREATE']
+keywords = ["print", "(", ")", '"', "'", "{", "}", 'create', 'expand']
+tokens = ["PRINT", "(", ")", '"', "'", "{", "}", 'CREATE', 'EXPAND']
 
 # Convert the source code to tokens
 interpret = convert_to_token(keywords, file, tokens)
@@ -38,12 +41,16 @@ class Interpret:
             elif token == "CREATE":
                 self.position += 1
                 self._handle_create()
+            elif token == "EXPAND":
+                self.position += 1
+                self._handle_expand()
             else:
                 self.position += 1
 
-    def _handle_print(self):
+    def _handle_print(self) -> None:
         """
         _handle_print
+
         self : none
 
         Used to handle the print statements
@@ -68,7 +75,7 @@ class Interpret:
         else:
             raise SyntaxError("Expected '('")
 
-    def _handle_create(self):
+    def _handle_create(self) -> None:
         """
         _handle_create
         self : none
@@ -118,6 +125,34 @@ class Interpret:
                 function_data: list = self.tokenized_output[self.position]
                 print("function: " + function_data)
                 self.position += 1
+    def _handle_skip(self) -> None:
+        """
+        Handles skip
+
+        _handle_skip -> None
+
+        Used to skip the function it is passed into
+        :return:
+        """
+        ...
+
+    def _handle_expand(self) -> None:
+        """
+        Handles expand
+
+        _handle_expand -> None
+
+        used to expand and use another .vast file form this vast file (commonly known as libraries)
+        :return:
+        """
+        if os.path.exists(f".vastlibs/lib/vast/local-packages/{self.tokenized_output[self.position]}"):
+            with open(f".vastlibs/lib/vast/local-packages/{self.tokenized_output[self.position]}", "r") as file:
+                pass
+        else:
+            raise FileNotFoundError(f"Library {self.tokenized_output[self.position]} does not exist within this directory\n",
+                                    f"--> try to run \"vivt mkienv\"")
+
+
 
 # Create an instance of the Interpret class and run the interpreter
 interpreter = Interpret(tokenized_output)
