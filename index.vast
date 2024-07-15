@@ -1,6 +1,7 @@
 expand example
-expand declorators
+expand declorator
 expand efhef
+expand finished
 
 print("Hello, World!")
 print("hi")

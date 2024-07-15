@@ -13,8 +13,8 @@ with open("config.xvast") as config_file:
             file = runfile[1].strip()
 
 # Keywords and their corresponding tokens
-keywords = ["print", "(", ")", '"', "'", "{", "}", 'create', 'expand']
-tokens = ["PRINT", "(", ")", '"', "'", "{", "}", 'CREATE', 'EXPAND']
+keywords = ["print", "(", ")", '"', "'", "{", "}", 'create', 'expand', 'export']
+tokens = ["PRINT", "(", ")", '"', "'", "{", "}", 'CREATE', 'EXPAND', 'EXPORT']
 
 # Convert the source code to tokens
 interpret = convert_to_token(keywords, file, tokens)
@@ -48,6 +48,9 @@ class Interpret:
             elif token == "EXPAND":
                 self.position += 1
                 self._handle_expand()
+            elif token == "EXPORT":
+                self.position += 1
+                self._handle_export()
             else:
                 self.position += 1
 
@@ -171,6 +174,18 @@ class Interpret:
 
             expanded_items.append(tokenized_output[self.position])
 
+            for packages in expanded_items:
+                if os.path.exists(f".vastlibs/lib/vast/local-packages/{packages}"):
+                    with open(f'.vastlibs/lib/vast/local-packages/{packages}/__package__.xvast', 'r') as package_file:
+                        if debug_mode:
+                            print("__package__ file contents: " + package_file.read())
+                        # continue on the logics of the .xvast file
+                        # create file to run xvast files
+                else:
+                    if debug_mode:
+                        print("package does not exist")
+
+
             if debug_mode:
                 print("expanded packages:" + str(expanded_items))
             self.position += 1
@@ -179,6 +194,16 @@ class Interpret:
             raise FileNotFoundError(f"Library {self.tokenized_output[self.position]} does not exist within this directory\n",
                                     f"--> try to run \"vivt mkienv\"")
 
+    def _handle_export(self) -> None:
+        """
+        Handles export
+
+        _handle_export -> None
+
+        Used to export python functions from a python-based module
+        :return:
+        """
+        pass
 
 
 
