@@ -1,4 +1,6 @@
 expand example
+expand declorators
+expand efhef
 
 print("Hello, World!")
 print("hi")

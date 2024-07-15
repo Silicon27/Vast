@@ -1,7 +1,8 @@
 import os
-
 from tokenize_lexer import convert_to_token
 
+# Set this too false to remove debug view
+debug_mode: bool = True
 
 # Read the config file to get the file name
 with open("config.xvast") as config_file:
@@ -18,11 +19,14 @@ tokens = ["PRINT", "(", ")", '"', "'", "{", "}", 'CREATE', 'EXPAND']
 # Convert the source code to tokens
 interpret = convert_to_token(keywords, file, tokens)
 tokenized_output = list(interpret.tokenize())
-print(tokenized_output)
+if debug_mode:
+    print(tokenized_output)
 
 # Global dictionary to store functions
 global functions
 functions = {}
+global expanded_items
+expanded_items: list = []
 
 # Class to interpret the tokenized output
 class Interpret:
@@ -67,7 +71,10 @@ class Interpret:
                 self.position += 1  # Move past closing '"' or "'"
                 if self.position < len(self.tokenized_output) and self.tokenized_output[self.position] == ')':
                     self.position += 1  # Move past ')'
-                    print(message)
+                    if debug_mode:
+                        print("Output: " + message)
+                    else:
+                        print(message)
                 else:
                     raise SyntaxError("Expected ')'")
             else:
@@ -112,18 +119,21 @@ class Interpret:
             raise SyntaxError("Expected ')' after function arguments")
 
         function_arguments = [arg.strip() for arg in ','.join(function_arguments).replace(" ", "").split(',')]
-        print(function_arguments)
+        if debug_mode:
+            print(function_arguments)
 
         # update the global functions dictionary
         functions[function_name] = function_arguments
-        print(f"Function created: {function_name} with arguments {function_arguments}")
+        if debug_mode:
+            print(f"Function created: {function_name} with arguments {function_arguments}")
         #IMPORTANT: remember to update the create statement so that it stores the code inside the {} brackets too
         if self.tokenized_output[self.position] == '{':
             self.position += 1
             while self.tokenized_output[self.position] != "{" and self.position < len(self.tokenized_output) and self.tokenized_output[self.position] != "}":
 
                 function_data: list = self.tokenized_output[self.position]
-                print("function: " + function_data)
+                if debug_mode:
+                    print("function: " + function_data)
                 self.position += 1
     def _handle_skip(self) -> None:
         """
@@ -142,19 +152,33 @@ class Interpret:
 
         _handle_expand -> None
 
-        used to expand and use another .vast file form this vast file (commonly known as libraries)
+        used to expand and use another .vast file form this vast file (commonly known as packages)
+        packages are currently to be made with python, with the .py extension
         :return:
         """
+
+
+        # check for if its an example module
         if self.tokenized_output[self.position] == "example":
-            print("expanded an example module")
+            if debug_mode:
+                print("successfully expanded an example package")
+            self.position += 1
+
+        elif self.position < len(self.tokenized_output) and self.tokenized_output[self.position] != "example":
+            package = str(tokenized_output[self.position].split(" "))
+            if debug_mode:
+                print("package: " + package)
+
+            expanded_items.append(tokenized_output[self.position])
+
+            if debug_mode:
+                print("expanded packages:" + str(expanded_items))
+            self.position += 1
+
         else:
-            if os.path.exists(f".vastlibs/lib/vast/local-packages/{self.tokenized_output[self.position]}"):
-                with open(f".vastlibs/lib/vast/local-packages/{self.tokenized_output[self.position]}", "r") as file:
-                    pass
-            else:
-                raise FileNotFoundError(
-                    f"Library {self.tokenized_output[self.position]} does not exist within this directory\n",
-                    f"--> try to run \"vivt mkienv\"")
+            raise FileNotFoundError(f"Library {self.tokenized_output[self.position]} does not exist within this directory\n",
+                                    f"--> try to run \"vivt mkienv\"")
+
 
 
 
