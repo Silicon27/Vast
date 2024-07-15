@@ -145,12 +145,16 @@ class Interpret:
         used to expand and use another .vast file form this vast file (commonly known as libraries)
         :return:
         """
-        if os.path.exists(f".vastlibs/lib/vast/local-packages/{self.tokenized_output[self.position]}"):
-            with open(f".vastlibs/lib/vast/local-packages/{self.tokenized_output[self.position]}", "r") as file:
-                pass
+        if self.tokenized_output[self.position] == "example":
+            print("expanded an example module")
         else:
-            raise FileNotFoundError(f"Library {self.tokenized_output[self.position]} does not exist within this directory\n",
-                                    f"--> try to run \"vivt mkienv\"")
+            if os.path.exists(f".vastlibs/lib/vast/local-packages/{self.tokenized_output[self.position]}"):
+                with open(f".vastlibs/lib/vast/local-packages/{self.tokenized_output[self.position]}", "r") as file:
+                    pass
+            else:
+                raise FileNotFoundError(
+                    f"Library {self.tokenized_output[self.position]} does not exist within this directory\n",
+                    f"--> try to run \"vivt mkienv\"")
 
 
 
