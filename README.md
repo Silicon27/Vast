@@ -1,3 +1,5 @@
+[![Discord](https://img.shields.io/badge/Discord-gray?style=flat-square&logo=discord&link=https://discord.gg/dDDrjSuxcg)](https://discord.gg/dDDrjSuxcg)
+
 # Vast Programming Language
 
 Vast is a programming language that is syntactically simular to python.
