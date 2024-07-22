@@ -1,7 +1,7 @@
 expand example
-expand declorator
 expand efhef
-expand finished
+expand huh
+expand declorator
 
 print("Hello, World!")
 print("hi")

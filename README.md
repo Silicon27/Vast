@@ -1,8 +1,10 @@
+[![Discord](https://img.shields.io/badge/Discord-gray?style=flat-square&logo=discord&link=https://discord.gg/dDDrjSuxcg)](https://discord.gg/dDDrjSuxcg)
+
 # Vast Programming Language
 
 Vast is a programming language that is syntactically simular to python.
 
-It is an interpreted, statically typed and non-object oriented language.
+It is an interpreted and dynamically typed programming language.
 
 Vast (as of currently) has **21** keywords, but as development continues, this number may be subject to change.
 - - -
