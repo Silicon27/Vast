@@ -231,7 +231,7 @@ class Interpret:
                 else:
                     if debug_mode:
                         print(f"\033[0;31mPackage '{packages}' does not exist\033[0m")
-                    raise FileNotFoundError("Package '" + packages + "' does not exist")
+                    raise ImportError("Package '" + packages + "' does not exist")
 
                 # Remove item from the list to avoid repeated imports
                 expanded_items.remove(packages)
