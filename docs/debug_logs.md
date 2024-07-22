@@ -35,3 +35,4 @@ As of currently, the following statements support `chunk`:
 >   **NOTE**: If the amount of expanded chunks exceed `1`, that means the interpreter has expanded the same package **twice**, and in the case that it does happen, please be sure to contact maintainers of Vast.
 <br>
 
+At the end of every `expand` chunk, there will be a `End Expanded Chunk(s)` message, by which indicates the end of the invoked expanded logic function.
