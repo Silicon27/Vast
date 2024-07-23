@@ -16,12 +16,15 @@ with open("config.xvast") as config_file:
 # Keywords and their corresponding tokens
 keywords = ["print", "(", ")", '"', "'", "{", "}", 'create', 'expand', 'export']
 tokens = ["PRINT", "(", ")", '"', "'", "{", "}", 'CREATE', 'EXPAND', 'EXPORT']
+SYMBOL = ["(", ")", "{", "}", "[", "]", ".", ","]
 
 # Convert the source code to tokens
-interpret = convert_to_token(keywords, file, tokens)
-tokenized_output = list(interpret.tokenize())
+interpret = convert_to_token(keywords, file, tokens, SYMBOL)
+tokenized_output, tokenized_dict = list(interpret.tokenize())
+
 if debug_mode:
     print(tokenized_output)
+    print(tokenized_dict)
 
 # Global dictionary to store functions
 functions = {}
@@ -220,6 +223,7 @@ class Interpret:
                             elif package_file_lines.startswith("export"):
                                 package_file_lines = package_file_lines.split("export")
                                 package_file_lines = list(filter(None, package_file_lines))
+
                                 if debug_mode:
                                     print("line: \033[38;5;206;48;5;57m"
                                           + str(package_file_lines).replace(" ", "")
