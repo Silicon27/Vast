@@ -11,18 +11,18 @@ Vast (as of currently) has **21** keywords, but as development continues, this n
 ### Warning
 Make sure to install [vivt](https://github.com/Silicon27/vivt) to ensure Vast works properly
 - - -
-Here is an example on a simple Vast program:
+Here is an example on a simple Vast program:                                                                
 - File Extension: `.vast`
 ```vast
 print("Hello, World!")
 ```
 To download Vast, use the following command:
 ```shell
-git clone https://github.com/Silicon27/VastPL
+git clone https://github.com/Silicon27/Vast
 ```
 Then, run the `interpret.py` file either from your terminal:
 
-**Mac**
+**Linux**
 ```shell
 python3 interpret.py
 ```
