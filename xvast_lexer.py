@@ -10,7 +10,6 @@ class convert_to_token:
     def __init__(self, keywords, file, tokens):
         self.keywords = keywords
         self.file = file
-        self.tokens = tokens
 
     def tokenize(self):
         tokenized_output = []

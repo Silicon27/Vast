@@ -7,13 +7,17 @@
 import re
 
 class convert_to_token:
-    def __init__(self, keywords, file, tokens):
+    def __init__(self, keywords, file, tokens, SYMBOL):
         self.keywords = keywords
         self.file = file
         self.tokens = tokens
+        self.tokens = tokens
+        self.symbol = SYMBOL
 
     def tokenize(self):
         tokenized_output = []
+        tokenized_dict = []
+        identifiers = []
 
         with open(self.file, "r") as file:
             for line in file:
@@ -28,4 +32,9 @@ class convert_to_token:
                     else:
                         tokenized_output.append(ele.strip())
 
-        return tokenized_output
+                    tokenized_dict.append(
+                        {"value": ele,
+                         "type": "SYMBOL" if ele in self.symbol else "KEYWORD" if ele in self.keywords else "IDENTIFIER"}
+                    )
+
+        return tokenized_output, tokenized_dict
