@@ -66,3 +66,4 @@ class convert_to_token:
                         item["value"] = item["value"].replace("\n", "")
 
         return tokenized_output, tokenized_dict, tokenized_output_w_spaces
+

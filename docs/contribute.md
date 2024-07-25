@@ -1,4 +1,5 @@
 # How to contribute to Vast
+<<<<<<< HEAD
 If you haven't already yet joined the Vast Discord server, you can do so by clicking [here](https://discord.gg/dDDrjSuxcg). The Discord server is crucial to be able to communicate with the developers and other contributors, as well as containing the requirements for contributing to Vast.
 
 Vast is an open source project, and we welcome all contributions. If you would like to contribute to Vast, you can do so by following the steps below:
@@ -26,3 +27,6 @@ Here are the guidelines for contributing to Vast:
 Your code will be reviewed by minimum of 2 maintainers, and if it is approved, it will be merged into the next update's branch.
 It is required for you to keep a **linear commit history**, and to squash your commits before creating a pull request, as well as to keep your pull request up to date with the latest changes in the following updates branch.
 
+=======
+under the works...
+>>>>>>> e6f7d42 (Added contribute doc)
