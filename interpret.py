@@ -5,7 +5,7 @@ from handlers import handle_string
 from handlers import handle_conditions
 
 # Set this too false to remove debug view
-debug_mode: bool = False
+debug_mode: bool = True
 
 # Read the config file to get the file name
 with open("config.xvast") as config_file:
