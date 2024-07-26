@@ -20,9 +20,11 @@ class convert_to_token:
         identifiers = []
 
         with open(self.file, "r") as file:
-            for line in file:
-                # split the details on the line
+            for position, line in enumerate(file, start=1):
+                # split the details on the line, whitespace not yet removed
                 temp = re.split(rf"({'|'.join(map(re.escape, self.keywords))})", line)
+
+                # Removing trailing, or leading whitespaces as well as empty strings
                 detail = [ele for ele in temp if ele.strip()]
 
                 # tokenize the split list
@@ -32,10 +34,21 @@ class convert_to_token:
                     else:
                         tokenized_output.append(ele.strip())
 
+                for ele in temp:
                     tokenized_dict.append(
                         {"value": ele,
+                         "line": position,
                          "type": "SYMBOL" if ele in self.symbol else "KEYWORD" if ele in self.keywords else "IDENTIFIER"}
                     )
+                # Iterate over a copy of the list to avoid modifying it while iterating
+                for item in tokenized_dict[:]:
+                    if not item["value"]:
+                        tokenized_dict.remove(item)
+                    elif "\n" in item["value"]:
+                        item["value"] = item["value"].replace("\n", "")
+
+
+
 
         return tokenized_output, tokenized_dict
 
