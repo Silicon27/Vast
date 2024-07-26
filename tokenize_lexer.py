@@ -39,4 +39,3 @@ class convert_to_token:
 
         return tokenized_output, tokenized_dict
 
-s

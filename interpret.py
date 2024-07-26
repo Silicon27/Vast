@@ -231,7 +231,6 @@ class Interpret:
                                     print(f"\033[1;33mImported {package_file_lines[0]}\033[0m")
                                     # Get the type of the package_file_lines variable (Should be of 'list' type)
                                     print("Extracted package file variable type: " + str(type(package_file_lines)))
-
                 else:
                     if debug_mode:
                         print(f"\033[0;31mPackage '{packages}' does not exist\033[0m")
