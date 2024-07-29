@@ -11,30 +11,58 @@ class convert_to_token:
         self.keywords = keywords
         self.file = file
         self.tokens = tokens
-        self.tokens = tokens
         self.symbol = SYMBOL
 
     def tokenize(self):
         tokenized_output = []
         tokenized_dict = []
-        identifiers = []
+        tokenized_output_w_spaces = []
+        toeknized_output_w_everything = []
 
         with open(self.file, "r") as file:
-            for line in file:
-                # split the details on the line
-                temp = re.split(rf"({'|'.join(map(re.escape, self.keywords))})", line)
-                detail = [ele for ele in temp if ele.strip()]
+            for position, line in enumerate(file, start=1):
 
-                # tokenize the split list
+                # Step 1: Escape each keyword
+                escaped_keywords = list(map(re.escape, self.keywords))
+
+                # Step 2: Join the escaped keywords with the pipe '|' symbol
+                joined_keywords = '|'.join(escaped_keywords)
+
+                # Step 3: Construct the regular expression pattern
+                # Match exact keywords and split on non-alphanumeric characters
+                pattern = rf"\b({joined_keywords})\b|([^\w\s])"
+
+                # Step 4: Use re.split with the constructed pattern
+                temp = re.split(pattern, line)
+
+                filtered_list = [x for x in temp if x and x.strip()]
+
+                # Append each non-empty item to the tokenized_output_w_spaces
+                tokenized_output_w_spaces.extend(filtered_list)
+                # Remove trailing, leading whitespaces, and empty strings
+                detail = [ele for ele in temp if ele and ele.strip()]
+
+                # Tokenize the split list
                 for ele in detail:
                     if ele in self.keywords:
                         tokenized_output.append(self.tokens[self.keywords.index(ele)])
+                    elif ele in self.symbol:
+                        tokenized_output.append(ele)
                     else:
                         tokenized_output.append(ele.strip())
 
+                for ele in detail:
                     tokenized_dict.append(
                         {"value": ele,
+                         "line": position,
                          "type": "SYMBOL" if ele in self.symbol else "KEYWORD" if ele in self.keywords else "IDENTIFIER"}
                     )
 
-        return tokenized_output, tokenized_dict
+                # Iterate over a copy of the list to avoid modifying it while iterating
+                for item in tokenized_dict[:]:
+                    if not item["value"]:
+                        tokenized_dict.remove(item)
+                    elif "\n" in item["value"]:
+                        item["value"] = item["value"].replace("\n", "")
+
+        return tokenized_output, tokenized_dict, tokenized_output_w_spaces
