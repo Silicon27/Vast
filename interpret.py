@@ -2,7 +2,7 @@ import os
 from tokenize_lexer import convert_to_token
 
 # Set this too false to remove debug view
-debug_mode: bool = True
+debug_mode: bool = False
 
 # Read the config file to get the file name
 with open("config.xvast") as config_file:
@@ -11,6 +11,7 @@ with open("config.xvast") as config_file:
         if "runfile:" in line:
             runfile = line.split(":")
             file = runfile[1].strip()
+
 
 # Keywords and their corresponding tokens
 keywords = ["print", "(", ")", '"', "'", "{", "}", 'create', 'expand', 'export']
@@ -230,6 +231,7 @@ class Interpret:
                                     print(f"\033[1;33mImported {package_file_lines[0]}\033[0m")
                                     # Get the type of the package_file_lines variable (Should be of 'list' type)
                                     print("Extracted package file variable type: " + str(type(package_file_lines)))
+
                 else:
                     if debug_mode:
                         print(f"\033[0;31mPackage '{packages}' does not exist\033[0m")
@@ -251,6 +253,7 @@ class Interpret:
               f"\033[1;31m End \033[0m"
               f"Expand Chunk(s) "
               f"_______________________________")
+
 
     def _handle_export(self) -> None:
         """
