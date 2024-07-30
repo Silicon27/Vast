@@ -1,0 +1,9 @@
+# Vast behaviour statement example
+
+behaviour FuncBehaviour {
+    retry: 2 # Times to retry after failure
+}
+
+create MyFunc(args1, args2)[type: <str>] behaviour: FuncBehaviour {
+    return "hello"
+}

@@ -20,7 +20,12 @@ To download Vast, use the following command:
 ```shell
 git clone https://github.com/Silicon27/Vast
 ```
-Then, run the `interpret.py` file either from your terminal:
+Change directory to the Vast folder:
+```shell
+cd Vast
+```
+
+Then, run the `interpret.py` file either from your terminal or code editor:
 
 **Linux**
 ```shell

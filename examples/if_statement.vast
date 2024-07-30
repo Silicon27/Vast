@@ -1,0 +1,10 @@
+# Vast if statement example
+
+declare a = 10
+declare b = 20
+
+if a > b {
+    print("hello") # This will not be printed
+} else {
+    print("world") # This will be printed
+}
