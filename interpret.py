@@ -1,6 +1,8 @@
 import os
+from errh import faultstack
 from tokenize_lexer import convert_to_token
-# from errh.faultstack import generate_error_message
+from handlers import handle_string
+from handlers import handle_conditions
 
 # Set this too false to remove debug view
 debug_mode: bool = False
@@ -14,9 +16,9 @@ with open("config.xvast") as config_file:
             file = runfile[1].strip()
 
 # Keywords and their corresponding tokens
-keywords = ["print", "(", ")", '"', "'", "{", "}", "=", 'create', 'expand', 'export', 'declare']
-tokens = ["PRINT", "(", ")", '"', "'", "{", "}", "=", 'CREATE', 'EXPAND', 'EXPORT', 'DECLARE']
-SYMBOL = ["(", ")", "{", "}", "[", "]", ".", ",", "="]
+keywords = ["print", "(", ")", '"', "'", "{", "}", "<", ">", "=", 'create', 'expand', 'export', 'declare', 'if']
+tokens = ["PRINT", "(", ")", '"', "'", "{", "}", "<", ">", "=", 'CREATE', 'EXPAND', 'EXPORT', 'DECLARE', 'IF']
+SYMBOL = ["(", ")", "{", "}", "[", "]", ".", ",", "=", "<", ">"]
 
 # Convert the source code to tokens
 interpret = convert_to_token(keywords, file, tokens, SYMBOL)
@@ -62,6 +64,9 @@ class Interpret:
             elif token == "DECLARE":
                 self.position += 1
                 self._handle_declare()
+            elif token == "IF":
+                self.position += 1
+                self._handle_if()
             else:
                 self._else_check()
                 self.position += 1
@@ -83,10 +88,10 @@ class Interpret:
             if self.tokenized_output[self.position] == '"' or self.tokenized_output[self.position] == "'":
                 quote_type = self.tokenized_output[self.position]
                 self.position += 1  # Move past '"' or "'"
-                message = ""
-                while self.position < len(self.tokenized_output) and self.tokenized_output[self.position] != quote_type:
-                    message += self.tokenized_output_w_spaces[self.position]
-                    self.position += 1
+                # Call the handle_string function to handle the string
+                message, self.position = handle_string.n_string(quote_type, self.tokenized_output_w_spaces, self.position)
+                if debug_mode:
+                    print(f"String Output: {message}")
                 self.position += 1  # Move past closing '"' or "'"
                 if self.position < len(self.tokenized_output) and self.tokenized_output[self.position] == ')':
                     self.position += 1  # Move past ')'
@@ -301,10 +306,7 @@ class Interpret:
             quote_type = self.tokenized_output[self.position + 2]
             variable_name = self.tokenized_output[self.position]
             self.position += 3  # Move past the variable name and '='
-            variable_contents = ""
-            while self.position < len(self.tokenized_output) and self.tokenized_output[self.position] != quote_type:
-                variable_contents += self.tokenized_output_w_spaces[self.position]
-                self.position += 1
+            variable_contents, self.position = handle_string.n_string(quote_type, self.tokenized_output_w_spaces, self.position)
 
             # Add string to the variables list
             variables.append(
@@ -336,6 +338,20 @@ class Interpret:
             if debug_mode:
                 print(f"Integer variable declared: {self.tokenized_output[self.position]}, with value: {self.tokenized_output[self.position + 2]}")
                 print(f"Variables: {variables}")
+    def _handle_if(self) -> None:
+        if_conditions = []
+        if debug_mode:
+            print("\033[0;36m'if' statement function invoked\033[0m")
+
+        while self.position < len(self.tokenized_output) and self.tokenized_output[self.position] != "{":
+            if self.tokenized_output[self.position] == "{":
+                break
+            if_conditions.append(self.tokenized_output[self.position])
+            self.position += 1
+
+        if debug_mode:
+            print(f"If conditions: {if_conditions}")
+
     def _else_check(self) -> None:
         if debug_mode:
             print(f"else output: {self.tokenized_output[self.position]}")

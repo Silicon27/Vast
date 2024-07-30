@@ -15,6 +15,7 @@ def get_characters_at_indices(strings, indices):
             characters.append(string[index])
     return characters
 
+
 def generate_error_message(line, filepath, value, error, err_type):
     for i in range(len(line)):
         print("\033[1;91m", end="")
@@ -28,11 +29,9 @@ def generate_error_message(line, filepath, value, error, err_type):
     exit()
 
 # Sample data
-line = [14, 17]
-filepath = ['/Users/yangmingde/PycharmProjects/Vastlang2/errh/faultstack.py', '/Users/yangmingde/PycharmProjects/Vastlang2/errh/faultstack.py']
-value = ['print("d")z', 'print("dadsa")s']
-error = [10, 14]
-err_type = ['SyntaxError', 'SyntaxError']
-
-# Generate the error message
-generate_error_message(line, filepath, value, error, err_type)
+# line = [14, 17]
+# filepath = ['/Users/yangmingde/PycharmProjects/Vastlang2/errh/faultstack.py', '/Users/yangmingde/PycharmProjects/Vastlang2/errh/faultstack.py']
+# value = ['print("d")z', 'print("dadsa")s']
+# error = [10, 14]
+# err_type = ['SyntaxError', 'SyntaxError']
+# generate_error_message(line, filepath, value, error, err_type)
