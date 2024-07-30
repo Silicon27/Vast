@@ -1,6 +1,5 @@
 import os
 from tokenize_lexer import convert_to_token
-# from errh.faultstack import generate_error_message
 
 # Set this too false to remove debug view
 debug_mode: bool = False
@@ -13,34 +12,30 @@ with open("config.xvast") as config_file:
             runfile = line.split(":")
             file = runfile[1].strip()
 
+
 # Keywords and their corresponding tokens
-keywords = ["print", "(", ")", '"', "'", "{", "}", "=", 'create', 'expand', 'export', 'declare']
-tokens = ["PRINT", "(", ")", '"', "'", "{", "}", "=", 'CREATE', 'EXPAND', 'EXPORT', 'DECLARE']
-SYMBOL = ["(", ")", "{", "}", "[", "]", ".", ",", "="]
+keywords = ["print", "(", ")", '"', "'", "{", "}", 'create', 'expand', 'export']
+tokens = ["PRINT", "(", ")", '"', "'", "{", "}", 'CREATE', 'EXPAND', 'EXPORT']
+SYMBOL = ["(", ")", "{", "}", "[", "]", ".", ","]
 
 # Convert the source code to tokens
 interpret = convert_to_token(keywords, file, tokens, SYMBOL)
-tokenized_output, tokenized_dict, tokenized_output_w_spaces = list(interpret.tokenize())
+tokenized_output, tokenized_dict = list(interpret.tokenize())
 
 if debug_mode:
     print(tokenized_output)
     print(tokenized_dict)
-    print(tokenized_output_w_spaces)
-
 
 # Global dictionary to store functions
 functions = {}
-variables = []
 expanded_items: list = []
 
 
 # Class to interpret the tokenized output
 class Interpret:
-    def __init__(self, tokenized_outputc, tokenized_dictc, tokenized_output_w_spacesc):
+    def __init__(self, tokenized_outputc):
         self.tokenized_output = tokenized_outputc
         self.position = 0  # Index of the current position in the tokenized output
-        self.tokenized_dict = tokenized_dictc
-        self.tokenized_output_w_spaces = tokenized_output_w_spacesc
 
     def interpret(self):
         while self.position < len(self.tokenized_output):
@@ -59,11 +54,7 @@ class Interpret:
             elif token == "EXPORT":
                 self.position += 1
                 self._handle_export()
-            elif token == "DECLARE":
-                self.position += 1
-                self._handle_declare()
             else:
-                self._else_check()
                 self.position += 1
 
     def _handle_print(self) -> None:
@@ -85,7 +76,7 @@ class Interpret:
                 self.position += 1  # Move past '"' or "'"
                 message = ""
                 while self.position < len(self.tokenized_output) and self.tokenized_output[self.position] != quote_type:
-                    message += self.tokenized_output_w_spaces[self.position]
+                    message += self.tokenized_output[self.position]
                     self.position += 1
                 self.position += 1  # Move past closing '"' or "'"
                 if self.position < len(self.tokenized_output) and self.tokenized_output[self.position] == ')':
@@ -96,20 +87,6 @@ class Interpret:
                         print(message)
                 else:
                     raise SyntaxError("Expected ')'")
-            elif self.tokenized_output[self.position] not in ("'", '"'):
-                for variable in variables:
-                   if variable["name"] == self.tokenized_output[self.position]:
-                       self.position += 1  # Move past the variable name
-                       if self.position < len(self.tokenized_output) and self.tokenized_output[self.position] == ')':
-                           self.position += 1  # Move past ')'
-                           if debug_mode:
-                               print("\033[0;32mVariable Output:\033[0m " + variable["value"])
-                           else:
-                               print(variable["value"])
-                       else:
-                           raise SyntaxError("Expected ')'")
-                       return
-                raise NameError(f"Variable {self.tokenized_output[self.position]} not found")
             else:
                 raise SyntaxError("Expected '\"' or \"'\"")
         else:
@@ -254,6 +231,7 @@ class Interpret:
                                     print(f"\033[1;33mImported {package_file_lines[0]}\033[0m")
                                     # Get the type of the package_file_lines variable (Should be of 'list' type)
                                     print("Extracted package file variable type: " + str(type(package_file_lines)))
+
                 else:
                     if debug_mode:
                         print(f"\033[0;31mPackage '{packages}' does not exist\033[0m")
@@ -276,6 +254,7 @@ class Interpret:
               f"Expand Chunk(s) "
               f"_______________________________")
 
+
     def _handle_export(self) -> None:
         """
         Handles export
@@ -287,60 +266,7 @@ class Interpret:
         """
         pass
 
-    def _handle_declare(self) -> None:
-        """
-        Handles dec
-
-        _handle_dec -> None
-
-        Used to declare a variable
-        :return:
-        """
-
-        if self.tokenized_output[self.position + 2] == '"' or self.tokenized_output[self.position + 2] == "'":
-            quote_type = self.tokenized_output[self.position + 2]
-            variable_name = self.tokenized_output[self.position]
-            self.position += 3  # Move past the variable name and '='
-            variable_contents = ""
-            while self.position < len(self.tokenized_output) and self.tokenized_output[self.position] != quote_type:
-                variable_contents += self.tokenized_output_w_spaces[self.position]
-                self.position += 1
-
-            # Add string to the variables list
-            variables.append(
-                {
-                    "name": variable_name,
-                    "value": variable_contents,
-                    "type": "string",
-                    "address": "hold up, making the address system"
-
-                }
-            )
-
-            if debug_mode:
-                print(f"String variable declared: {self.tokenized_output[self.position]}, with value: {self.tokenized_output[self.position + 3]}")
-                print(f"Variables: {variables}")
-
-        elif self.tokenized_output[self.position + 2].isdigit():
-            # Add integer to the variables list
-            variables.append(
-                {
-                    "name": self.tokenized_output[self.position],
-                    "value": self.tokenized_output[self.position + 2],
-                    "type": "integer",
-                    "address": "hold up, making the address system"
-
-                }
-            )
-
-            if debug_mode:
-                print(f"Integer variable declared: {self.tokenized_output[self.position]}, with value: {self.tokenized_output[self.position + 2]}")
-                print(f"Variables: {variables}")
-    def _else_check(self) -> None:
-        if debug_mode:
-            print(f"else output: {self.tokenized_output[self.position]}")
-
 
 # Create an instance of the Interpret class and run the interpreter
-interpreter = Interpret(tokenized_output, tokenized_dict, tokenized_output_w_spaces)
+interpreter = Interpret(tokenized_output)
 interpreter.interpret()
