@@ -1,0 +1,11 @@
+# Vast function creation example
+
+create MyFunc(args1, args2)[type: <str>]{ # Return type string
+    return "hello"
+}
+
+create MyFunc2(args1, args2){ # No return type also works
+    return "hello"
+}
+
+MyFunc(1, 2) # Output: hello
