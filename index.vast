@@ -3,14 +3,8 @@ expand efhef
 expand huh
 expand declorator
 
-declare a = 112123
-declare fdeclare = "fdeclare variable is shown! This is my value!"
-
-print("Hello,   qwdqwdqwd World!")
+print("Hello, World!")
 print("hi")
-print(a)
-print(fdeclare)
-
 create functionmy(arg1, arg2){
     skip
     asdf
