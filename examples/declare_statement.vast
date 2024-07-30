@@ -1,7 +1,7 @@
 # Vast variable declaration example
 
 declare a = 123
-declare b = "fdeclare variable is shown! This is my value!"
+declare b = "variable b is shown! This is my value!"
 
 print(a) # Output: 123
 print(b) # Output: fdeclare variable is shown! This is my value!
