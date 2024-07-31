@@ -26,9 +26,3 @@ def use_nested_structure(nested_structure):
             print(item, end=" ")
 
 
-
-
-
-
-
-
