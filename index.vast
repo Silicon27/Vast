@@ -8,7 +8,7 @@ declare fdeclare = "fdeclare variable is shown! This is my value!"
 declare b = 20
 
 print("Hello,   qwdqwdqwd World!")
-print("hi")
+print("hi de d edwe,ewd wed")
 print(a)
 print(fdeclare)
 
@@ -16,13 +16,6 @@ if a > b {
     print("hello")
 }
 
-create functionmy(arg1, arg2){
-    skip
-    asdf
-    asd
-    da
-    sd
-    asdasd
-
-    asd
+create functionmy(arg1, arg2)[type: <str>]{
+    print("hello")
 }
