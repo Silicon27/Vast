@@ -27,22 +27,6 @@ def use_nested_structure(nested_structure):
 
 
 
-# Example usage
-tokenized_output = [
-    'if', 'a', '>', 'b', '{',
-        'print', '(', '"level 1"', ')',
-        'if', 'c', '==', 'd', '{',
-            'print', '(', '"level 2"', ')',
-            'if', 'e', '<', 'f', '{',
-                'print', '(', '"level 3"', ')',
-            '}',
-        '}',
-        'print', '(', '"back to level 1"', ')',
-    '}'
-]
-# nested_structure = track_braces(tokenized_output)
-# print(f"Nested structure: {nested_structure}")
-# use_nested_structure(nested_structure)
 
 
 
