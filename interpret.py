@@ -8,7 +8,7 @@ from handlers import handle_curly_braces
 from handlers import scope_handler
 
 # Set this too false to remove debug view
-debug_mode: bool = True
+debug_mode: bool = False
 
 # Read the config file to get the file name
 with open("config.xvast") as config_file:
