@@ -16,6 +16,9 @@ def get_characters_at_indices(strings, indices):
     return characters
 
 
+def get_error_position(line, character):
+    return line.index(character) - 1
+
 def generate_error_message(line, filepath, value, error, err_type):
     for i in range(len(line)):
         print("\033[1;91m", end="")

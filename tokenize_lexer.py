@@ -6,7 +6,9 @@
 
 import re
 
-class convert_to_token:
+
+class ConvertToToken:
+
     def __init__(self, keywords, file, tokens, SYMBOL):
         self.keywords = keywords
         self.file = file
@@ -22,18 +24,7 @@ class convert_to_token:
         with open(self.file, "r") as file:
             for position, line in enumerate(file, start=1):
 
-                # Step 1: Escape each keyword
-                escaped_keywords = list(map(re.escape, self.keywords))
-
-                # Step 2: Join the escaped keywords with the pipe '|' symbol
-                joined_keywords = '|'.join(escaped_keywords)
-
-                # Step 3: Construct the regular expression pattern
-                # Match exact keywords and split on non-alphanumeric characters
-                pattern = rf"\b({joined_keywords})\b|([^\w\s])"
-
-                # Step 4: Use re.split with the constructed pattern
-                temp = re.split(pattern, line)
+                temp = re.split(rf"\b({'|'.join(map(re.escape, self.keywords))})\b|([^\w\s])", line)
 
                 filtered_list = [x for x in temp if x and x.strip()]
 
@@ -66,3 +57,4 @@ class convert_to_token:
                         item["value"] = item["value"].replace("\n", "")
 
         return tokenized_output, tokenized_dict, tokenized_output_w_spaces
+
