@@ -1,7 +1,7 @@
 import os
 import sys
 from errh import faultstack
-from tokenize_lexer import convert_to_token
+from tokenize_lexer import ConvertToToken
 from handlers import handle_string
 from handlers import handle_conditions
 from handlers import handle_curly_braces
@@ -26,7 +26,7 @@ string_types = ["e", "n"]
 variable_types = ["int", "str"]
 
 # Convert the source code to tokens
-interpret = convert_to_token(keywords, file, tokens, SYMBOL)
+interpret = ConvertToToken(keywords, file, tokens, SYMBOL)
 tokenized_output, tokenized_dict, tokenized_output_w_spaces = list(interpret.tokenize())
 scope_list = scope_handler.track_braces(tokenized_output)
 
@@ -39,8 +39,9 @@ if debug_mode:
     print(f"\033[1;32mTokenized Dict Size: {sys.getsizeof(tokenized_dict)}\033[0m")
     print(f"\033[1;32mTokenized Output w/ Spaces Size: {sys.getsizeof(tokenized_output_w_spaces)}\033[0m")
     print(f"\033[1;32mScope List Size: {sys.getsizeof(scope_list)}\033[0m")
-    print(f"\033[1;32mTokenized Output w/ Everything Size: {sys.getsizeof(tokenized_output) + sys.getsizeof(tokenized_dict) + sys.getsizeof(tokenized_output_w_spaces)}\033[0m")
-
+    print(f"\033[1;32mTokenized Output w/ Everything Size: {sys.getsizeof(tokenized_output)
+                                                            + sys.getsizeof(tokenized_dict)
+                                                            + sys.getsizeof(tokenized_output_w_spaces)}\033[0m")
 
 # Crucial global variables
 functions = []
@@ -50,13 +51,15 @@ open_curly_brace_count, closing_curly_brace_count = handle_curly_braces.count_br
 if open_curly_brace_count != closing_curly_brace_count:
     raise SyntaxError("Unequal number of opening and closing curly braces")
 
+
 # Class to interpret the tokenized output
 class Interpret:
-    def __init__(self, tokenized_outputc, tokenized_dictc, tokenized_output_w_spacesc):
+    def __init__(self, tokenized_outputc, tokenized_dictc, tokenized_output_w_spacesc, scope_listc):
         self.tokenized_output = tokenized_outputc
         self.position = 0  # Index of the current position in the tokenized output
         self.tokenized_dict = tokenized_dictc
         self.tokenized_output_w_spaces = tokenized_output_w_spacesc
+        self.scope_list = scope_listc
 
     def interpret(self):
         while self.position < len(self.tokenized_output):
@@ -94,13 +97,15 @@ class Interpret:
         Used to handle the print statements
         """
 
-        global print_message
+        print_message: str = ""
         if debug_mode:
             print("\033[0;36m'print' statement function invoked\033[0m")
 
         if self.tokenized_output[self.position] == '(':
             self.position += 1  # Move past '('
-            if self.tokenized_output[self.position] == '"' or self.tokenized_output[self.position] == "'" or self.tokenized_output[self.position] in string_types:
+            if (self.tokenized_output[self.position] == '"'
+                    or self.tokenized_output[self.position] == "'"
+                    or self.tokenized_output[self.position] in string_types):
 
                 # Checking if the string type
                 if self.tokenized_output[self.position] in string_types:
@@ -108,14 +113,19 @@ class Interpret:
                         self.position += 1  # Move past 'e'
                         quote_type = self.tokenized_output[self.position]
                         # Call the handle_string function to handle the string
-                        print_message, self.position = handle_string.e_string(quote_type, self.tokenized_output_w_spaces, self.position, self.tokenized_dict)
+                        print_message, self.position = handle_string.e_string(quote_type,
+                                                                              self.tokenized_output_w_spaces,
+                                                                              self.position,
+                                                                              self.tokenized_dict)
 
                 # Else default to normal string
                 else:
                     quote_type = self.tokenized_output[self.position]
                     self.position += 1  # Move past '"' or "'"
                     # Call the handle_string function to handle the string
-                    print_message, self.position = handle_string.n_string(quote_type, self.tokenized_output_w_spaces, self.position)
+                    print_message, self.position = handle_string.n_string(quote_type,
+                                                                          self.tokenized_output_w_spaces,
+                                                                          self.position)
                 if debug_mode:
                     print(f"String Output: {print_message}")
                 self.position += 1  # Move past closing '"' or "'"
@@ -127,24 +137,19 @@ class Interpret:
                         print(print_message)
                 else:
                     raise SyntaxError("Expected ')'")
-                    # faultstack.generate_error_print_message([self.tokenized_dict[self.position]["line"]],
-                    #                                   [__file__],
-                    #                                   [self.tokenized_output[self.position + 2]],
-                    #                                   [faultstack.get_error_position(self.tokenized_output[self.position + 2], ")")],
-                    #                                   ["SyntaxError"])
             elif self.tokenized_output[self.position] not in ("'", '"'):
                 for variable in variables:
-                   if variable["name"] == self.tokenized_output[self.position]:
-                       self.position += 1  # Move past the variable name
-                       if self.position < len(self.tokenized_output) and self.tokenized_output[self.position] == ')':
-                           self.position += 1  # Move past ')'
-                           if debug_mode:
-                               print("\033[0;32mVariable Output:\033[0m " + variable["value"])
-                           else:
-                               print(variable["value"])
-                       else:
-                           raise SyntaxError("Expected ')'")
-                       return
+                    if variable["name"] == self.tokenized_output[self.position]:
+                        self.position += 1  # Move past the variable name
+                        if self.position < len(self.tokenized_output) and self.tokenized_output[self.position] == ')':
+                            self.position += 1  # Move past ')'
+                            if debug_mode:
+                                print("\033[0;32mVariable Output:\033[0m " + variable["value"])
+                            else:
+                                print(variable["value"])
+                        else:
+                            raise SyntaxError("Expected ')'")
+                        return
                 raise NameError(f"Variable {self.tokenized_output[self.position]} not found")
             else:
                 raise SyntaxError("Expected '\"' or \"'\"")
@@ -225,6 +230,7 @@ class Interpret:
                         raise SyntaxError("Expected ':'")
                 else:
                     raise SyntaxError("Expected 'type'")
+
 
 
         # update the global functions dictionary
@@ -350,6 +356,7 @@ class Interpret:
             raise FileNotFoundError(f"Library {self.tokenized_output[self.position]}"
                                     f" does not exist within this directory\n",
                                     f"--> try to run \"vivt mkienv\"")
+
     if debug_mode:
         print(f"_______________________________"
               f"\033[1;31m End \033[0m"
@@ -381,7 +388,8 @@ class Interpret:
             quote_type = self.tokenized_output[self.position + 2]
             variable_name = self.tokenized_output[self.position]
             self.position += 3  # Move past the variable name and '='
-            variable_contents, self.position = handle_string.n_string(quote_type, self.tokenized_output_w_spaces, self.position)
+            variable_contents, self.position = handle_string.n_string(quote_type, self.tokenized_output_w_spaces,
+                                                                      self.position)
 
             # Add string to the variables list
             variables.append(
@@ -395,7 +403,12 @@ class Interpret:
             )
 
             if debug_mode:
-                print(f"String variable declared: {self.tokenized_output[self.position]}, with value: {self.tokenized_output[self.position + 3]}")
+                print(
+                    f"String variable declared: "
+                    f"{self.tokenized_output[self.position]}"
+                    f", with value: "
+                    f"{self.tokenized_output[self.position + 3]}")
+
                 print(f"Variables: {variables}")
 
         elif self.tokenized_output[self.position + 2].isdigit():
@@ -411,7 +424,12 @@ class Interpret:
             )
 
             if debug_mode:
-                print(f"Integer variable declared: {self.tokenized_output[self.position]}, with value: {self.tokenized_output[self.position + 2]}")
+                print(
+                    f"Integer variable declared: "
+                    f"{self.tokenized_output[self.position]}"
+                    f", with value: "
+                    f"{self.tokenized_output[self.position + 2]}")
+
                 print(f"Variables: {variables}")
 
     def _handle_if(self) -> None:
@@ -425,7 +443,10 @@ class Interpret:
             if_conditions.append(self.tokenized_output[self.position])
             self.position += 1
 
+        condition_state = handle_conditions.check_if(if_conditions, variables)
+
         if debug_mode:
+            print(f"Condition state: {condition_state}")
             print(f"If conditions: {if_conditions}")
 
     def _else_check(self) -> None:
@@ -434,5 +455,5 @@ class Interpret:
 
 
 # Create an instance of the Interpret class and run the interpreter
-interpreter = Interpret(tokenized_output, tokenized_dict, tokenized_output_w_spaces)
+interpreter = Interpret(tokenized_output, tokenized_dict, tokenized_output_w_spaces, scope_list)
 interpreter.interpret()

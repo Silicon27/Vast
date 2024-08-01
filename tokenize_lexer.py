@@ -6,7 +6,9 @@
 
 import re
 
-class convert_to_token:
+
+class ConvertToToken:
+
     def __init__(self, keywords, file, tokens, SYMBOL):
         self.keywords = keywords
         self.file = file
