@@ -2,7 +2,7 @@
 
 # Vast Programming Language
 
-Vast is a programming language that is syntactically simular to python.
+Vast is a programming language that is syntactically similar to python.
 
 It is an interpreted and dynamically typed programming language.
 
