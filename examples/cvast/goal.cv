@@ -1,0 +1,7 @@
+// End goal for the CVast project, be able to run this
+
+fn <_v> main() {
+    println!("Hello, world!");
+    return 0;
+}
+

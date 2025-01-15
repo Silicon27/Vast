@@ -1,6 +1,5 @@
 import os
 import sys
-from errh import faultstack
 from tokenize_lexer import ConvertToToken
 from handlers import handle_string
 from handlers import handle_conditions

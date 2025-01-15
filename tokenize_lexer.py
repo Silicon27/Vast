@@ -5,6 +5,7 @@
 """
 
 import re
+import os
 
 
 class ConvertToToken:
@@ -13,7 +14,7 @@ class ConvertToToken:
         self.keywords = keywords
         self.file = file
         self.tokens = tokens
-        self.symbol = SYMBOL
+        self.symbol = sorted(SYMBOL, key=len, reverse=True)  # Sort symbols by length to ensure combined symbols are matched first
 
     def tokenize(self):
         tokenized_output = []
@@ -21,10 +22,12 @@ class ConvertToToken:
         tokenized_output_w_spaces = []
         toeknized_output_w_everything = []
 
-        with open(self.file, "r") as file:
+        with open(os.path.abspath(self.file), "r") as file:
             for position, line in enumerate(file, start=1):
 
-                temp = re.split(rf"\b({'|'.join(map(re.escape, self.keywords))})\b|([^\w\s])", line)
+                temp = re.split(
+                    rf"\b({'|'.join(map(re.escape, self.keywords))})\b|({'|'.join(map(re.escape, self.symbol))})", line
+                )
 
                 filtered_list = [x for x in temp if x and x.strip()]
 
@@ -44,9 +47,15 @@ class ConvertToToken:
 
                 for ele in detail:
                     tokenized_dict.append(
-                        {"value": ele,
-                         "line": position,
-                         "type": "SYMBOL" if ele in self.symbol else "KEYWORD" if ele in self.keywords else "IDENTIFIER"}
+                        {
+                            "value": ele,
+                            "line": position,
+                            "type": (
+                                "SYMBOL"
+                                if ele in self.symbol
+                                else "KEYWORD" if ele in self.keywords else "IDENTIFIER"
+                            ),
+                        }
                     )
 
                 # Iterate over a copy of the list to avoid modifying it while iterating
@@ -57,4 +66,3 @@ class ConvertToToken:
                         item["value"] = item["value"].replace("\n", "")
 
         return tokenized_output, tokenized_dict, tokenized_output_w_spaces
-
