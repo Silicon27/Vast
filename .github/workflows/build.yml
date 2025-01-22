@@ -2,8 +2,6 @@ name: Build main.cpp in cvast
 
 on:
   push:
-    paths:
-      - cvast/main.cpp
   pull_request:
     paths:
       - cvast/main.cpp
