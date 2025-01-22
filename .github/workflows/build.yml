@@ -22,7 +22,11 @@ jobs:
 
       - name: Compile main.cpp
         working-directory: ./cvast
-        run: g++ -o main main.cpp -I/usr/include/python3.13 -lpython3.13
+        run: |
+          g++ -o main main.cpp \
+          -I/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13 \
+          -L/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib \
+          -lpython3.13
 
       - name: Run the compiled program (Optional)
         working-directory: ./cvast
