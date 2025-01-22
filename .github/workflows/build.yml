@@ -15,19 +15,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup C++ environment
+      - name: Set up Python and CMake
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ python3-dev
+          sudo apt-get install -y cmake g++ python3-dev
 
-      - name: Compile main.cpp
+      - name: Build with CMake
         working-directory: ./cvast
         run: |
-          g++ -o main main.cpp \
-          -I/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13 \
-          -L/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib \
-          -lpython3.13
+          mkdir -p build
+          cd build
+          cmake ..
+          make
 
       - name: Run the compiled program (Optional)
-        working-directory: ./cvast
-        run: ./main
+        working-directory: ./cvast/build
+        run: ./Vast
