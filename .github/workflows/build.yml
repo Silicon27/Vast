@@ -23,7 +23,7 @@ jobs:
 
       - name: Compile main.cpp
         working-directory: ./cvast
-        run: g++ -o main main.cpp -I/usr/include/python3.8 -lpython3.8
+        run: g++ -o main main.cpp -I/usr/include/python3.13 -lpython3.13
 
       - name: Run the compiled program (Optional)
         working-directory: ./cvast
