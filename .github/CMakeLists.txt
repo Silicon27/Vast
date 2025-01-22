@@ -12,8 +12,7 @@ include_directories(${Python3_INCLUDE_DIRS})
 
 # Create the executable
 add_executable(Vast
-        cvast/main.cpp
-        cvast/headers/PythonTokenizer.h
+        ../cvast/main.cpp
 )
 
 # Link Python libraries to the executable
