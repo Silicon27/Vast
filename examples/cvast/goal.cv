@@ -1,7 +1,9 @@
-// End goal for the CVast project, be able to run this
+[>] i == 0 -> if_i0
+[?] i == 3 -> if_i3
+[.] -> if_iD
 
-fn <_v> main() {
-    println!("Hello, world!");
-    return 0;
+
+fn <int> if_i0(){
+
 }
 

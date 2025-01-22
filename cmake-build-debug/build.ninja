@@ -51,8 +51,8 @@ build cmake_object_order_depends_target_Vast: phony || .
 
 build CMakeFiles/Vast.dir/cvast/main.cpp.o: CXX_COMPILER__Vast_unscanned_Debug /Users/silicon/PycharmProjects/Vast/cvast/main.cpp || cmake_object_order_depends_target_Vast
   DEP_FILE = CMakeFiles/Vast.dir/cvast/main.cpp.o.d
-  FLAGS = -g -std=gnu++14 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
-  INCLUDES = -I/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13
+  FLAGS = -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics
+  INCLUDES = -I/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13 -I/opt/homebrew/include
   OBJECT_DIR = CMakeFiles/Vast.dir
   OBJECT_FILE_DIR = CMakeFiles/Vast.dir/cvast
 
