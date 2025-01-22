@@ -4,18 +4,20 @@ project(Vast)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Include the Python headers from the correct path
-include_directories(/usr/include/python3.13)
+# Find Python libraries and headers
+find_package(PythonLibs REQUIRED)
+
+# Include the Python headers found by find_package
+include_directories(${PYTHON_INCLUDE_DIRS})
 
 # Create the executable
 add_executable(Vast
-        ../cvast/main.cpp
+        cvast/main.cpp
+        cvast/headers/PythonTokenizer.h
 )
 
-# Link Python library (ensure it's the correct version)
-target_link_libraries(${PROJECT_NAME}
-        /usr/lib/python3.13/config-3.13-x86_64-linux-gnu/libpython3.13.so
-)
+# Link Python libraries to the executable
+target_link_libraries(Vast ${PYTHON_LIBRARIES})
 
-# Add the include directories for other necessary libraries if needed
+# If you need additional include directories, you can add them here
 target_include_directories(Vast PRIVATE /opt/homebrew/include)
