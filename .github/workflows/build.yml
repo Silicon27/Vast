@@ -1,0 +1,28 @@
+name: Build main.cpp in cvast
+
+on:
+  push:
+    paths:
+      - cvast/main.cpp
+  pull_request:
+    paths:
+      - cvast/main.cpp
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup C++ environment
+        run: sudo apt-get install -y g++
+
+      - name: Compile main.cpp
+        working-directory: ./cvast
+        run: g++ -o main main.cpp
+
+      - name: Run the compiled program (Optional)
+        working-directory: ./cvast
+        run: ./main

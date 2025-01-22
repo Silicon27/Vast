@@ -1,5 +1,9 @@
 [![Discord](https://img.shields.io/badge/Discord-gray?style=flat-square&logo=discord&link=https://discord.gg/dDDrjSuxcg)](https://discord.gg/dDDrjSuxcg)
 
+
+![CVast Build Status](https://github.com/Silicon27/Vast/actions/workflows/build.yml/badge.svg)
+
+
 # Vast Programming Language
 
 Vast is a programming language that is syntactically similar to python.

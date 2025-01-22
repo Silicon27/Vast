@@ -1,6 +1,5 @@
 #include "headers/PythonTokenizer.h"
 #include <iostream>
-#include <tao/pegtl.hpp>
 
 // store all values as strings for variables, that is, if it's an array, then it's "[1,2,3]",
 // and how some sort of string parser to parse it later
@@ -13,9 +12,6 @@ using vec_str = std::vector<std::string>;
 #include <vector>
 #include "headers/runner.h"
 #include "headers/constants.h"
-
-// Assuming vec_str is a type alias for std::vector<std::string>
-using vec_str = std::vector<std::string>;
 
 
 int main(int argc, char *argv[]) {
