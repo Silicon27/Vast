@@ -3,35 +3,28 @@ name: Build main.cpp in cvast
 on:
   push:
     paths:
-      - cvast/**
+      - cvast/main.cpp
   pull_request:
     paths:
-      - cvast/**
+      - cvast/main.cpp
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Install necessary dependencies
-      - name: Install dependencies
+      - name: Setup C++ environment
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ cmake python3-dev
+          sudo apt-get install -y g++ python3-dev
 
-      # Configure the project with CMake
-      - name: Configure with CMake
-        run: cmake -B build -S .
+      - name: Compile main.cpp
+        working-directory: ./cvast
+        run: g++ -o main main.cpp -I/usr/include/python3.8 -lpython3.8
 
-      # Build the project using CMake
-      - name: Build with CMake
-        run: cmake --build build
-
-      # Optional: Run the compiled program
-      - name: Run the program
-        working-directory: build
-        run: ./Vast
+      - name: Run the compiled program (Optional)
+        working-directory: ./cvast
+        run: ./main
