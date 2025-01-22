@@ -15,19 +15,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python and CMake
+      - name: Set up Python and GCC
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ python3.12-dev
+          sudo apt-get install -y g++ python3.12-dev
 
-      - name: Build with CMake
+      - name: Compile using gcc with Python 3.9
         working-directory: ./cvast
         run: |
-          mkdir -p build
-          cd build
-          cmake ../../.github
-          make
+          gcc -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12
 
       - name: Run the compiled program (Optional)
-        working-directory: ./cvast/build
-        run: ./Vast
+        working-directory: ./cvast
+        run: ./main
