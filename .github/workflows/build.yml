@@ -20,10 +20,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y g++ python3.12-dev
 
-      - name: Compile using gcc with Python 3.9
+      - name: Compile using g++ with Python 3.12
         working-directory: ./cvast
         run: |
-          gcc -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12
+          g++ -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12
 
       - name: Run the compiled program (Optional)
         working-directory: ./cvast
