@@ -9,8 +9,7 @@ include_directories(/usr/include/python3.13)
 
 # Create the executable
 add_executable(Vast
-        cvast/main.cpp
-        cvast/headers/PythonTokenizer.h
+        ../cvast/main.cpp
 )
 
 # Link Python library (ensure it's the correct version)
