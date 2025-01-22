@@ -13,15 +13,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Install necessary dependencies
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y g++ cmake python3-dev
 
+      # Configure the project with CMake
       - name: Configure with CMake
-        run: |
-          cmake -B build -S .
-          cmake --build build
+        run: cmake -B build -S .
+
+      # Build the project using CMake
+      - name: Build with CMake
+        run: cmake --build build
+
+      # Optional: Run the compiled program
+      - name: Run the program
+        working-directory: build
+        run: ./Vast
