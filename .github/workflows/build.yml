@@ -1,28 +1,31 @@
-name: Build main.cpp in cvast
-
-on:
-  push:
-    paths:
-      - cvast/main.cpp
-  pull_request:
-    paths:
-      - cvast/main.cpp
-
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup C++ environment
-        run: sudo apt-get install -y g++
+      - name: Install dependencies on Linux
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ cmake python3-dev
 
-      - name: Compile main.cpp
-        working-directory: ./cvast
-        run: g++ -o main main.cpp
+      - name: Install dependencies on macOS
+        if: runner.os == 'macOS'
+        run: brew install gcc cmake python
 
-      - name: Run the compiled program (Optional)
-        working-directory: ./cvast
-        run: ./main
+      - name: Install dependencies on Windows
+        if: runner.os == 'Windows'
+        run: |
+          choco install cmake python
+          echo "::add-path::C:\ProgramData\chocolatey\bin"
+
+      - name: Configure with CMake
+        run: |
+          cmake -B build -S .
+          cmake --build build
