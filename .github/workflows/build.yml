@@ -1,29 +1,25 @@
+name: Build main.cpp in cvast
+
+on:
+  push:
+    paths:
+      - cvast/**
+  pull_request:
+    paths:
+      - cvast/**
+
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install dependencies on Linux
-        if: runner.os == 'Linux'
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y g++ cmake python3-dev
-
-      - name: Install dependencies on macOS
-        if: runner.os == 'macOS'
-        run: brew install gcc cmake python
-
-      - name: Install dependencies on Windows
-        if: runner.os == 'Windows'
-        run: |
-          choco install cmake python
-          echo "::add-path::C:\ProgramData\chocolatey\bin"
 
       - name: Configure with CMake
         run: |
