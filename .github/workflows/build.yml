@@ -24,5 +24,4 @@ jobs:
         working-directory: ./cvast
         # g++ -g -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12
         run: |
-          ls
-          cmake --build ../cmake_build_debug --target Vast -j 8
+          cmake --build ../cmake-build-debug --target Vast -j 8
