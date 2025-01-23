@@ -6,6 +6,8 @@
 
 # Vast Programming Language
 
+> !WARNING Outdated!!!
+
 Vast is a programming language that is syntactically similar to python.
 
 It is an interpreted and statically (dynamic typing implementation comming to CVast later this year) typed programming language.
