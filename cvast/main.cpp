@@ -1,7 +1,8 @@
 #include "headers/PythonTokenizer.h"
 #include <iostream>
 #include <string>
-#include <algorithm>
+#include <ranges>
+
 
 // store all values as strings for variables, that is, if it's an array, then it's "[1,2,3]",
 // and how some sort of string parser to parse it later
