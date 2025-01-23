@@ -38,7 +38,7 @@ public:
          * var h
          */
 
-        return position
+        return position;
     }
     int _func(int position);
     int _if(int position);
@@ -56,22 +56,19 @@ public:
 
     // Getter and Setter methods to manipulate internal data if required
     void setVarMap(const std::map<std::string, std::string>& map) { var_map = map; }
-    const std::map<std::string, std::string>& getVarMap() const { return var_map; }
+    [[nodiscard]]const std::map<std::string, std::string>& getVarMap() const { return var_map; }
 
     void setFuncMap(const std::map<std::string, vec_str>& map) { func_map = map; }
-    const std::map<std::string, vec_str>& getFuncMap() const { return func_map; }
+    [[nodiscard]] const std::map<std::string, vec_str>& getFuncMap() const { return func_map; }
 
     void setTokenizedOutput(const vec_str& output) { tokenizedOutput = output; }
-    const vec_str& getTokenizedOutput() const { return tokenizedOutput; }
+    [[nodiscard]] const vec_str& getTokenizedOutput() const { return tokenizedOutput; }
 
     void setTokenizedOutputWithSpaces(const vec_str& output) { tokenizedOutputWithSpaces = output; }
-    const vec_str& getTokenizedOutputWithSpaces() const { return tokenizedOutputWithSpaces; }
+    [[nodiscard]] const vec_str& getTokenizedOutputWithSpaces() const { return tokenizedOutputWithSpaces; }
 
     void setTokenizedDict(const std::vector<std::map<std::string, std::string>>& dict) { tokenizedDict = dict; }
-    const std::vector<std::map<std::string, std::string>>& getTokenizedDict() const { return tokenizedDict; }
+    [[nodiscard]] const std::vector<std::map<std::string, std::string>>& getTokenizedDict() const { return tokenizedDict; }
 
-    int _var(int position) {
-        return 0;
-    }
 };
 
