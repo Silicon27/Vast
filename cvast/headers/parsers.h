@@ -7,35 +7,80 @@
 using parser_rt = std::tuple<int, bool>;
 
 
+// TODO: Create custom exception handler file to handle exceptions
+inline void raise(const std::string &message) {
+    throw std::runtime_error(message);
+}
+
+
 namespace parsers {
     namespace keyword {
         // var
-        inline parser_rt _pvar(int position, const vec_str &tokenizedOutput) {
-            if (tokenizedOutput[position] == "var") {
-                return {position + 1, true};
+        inline void _pvar(int& position, const vec_str& tokenizedOutput) {
+            if (tokenizedOutput[position] == "VAR") {
+                position++;
+                return;
             }
-            return {position, false};
+            raise("Expected 'var' keyword.");
         }
     }
 
 
     namespace symbol {
-        inline parser_rt _pplus_sym(int position, const vec_str &tokenizedOutput) {
+        inline void _pplus_sym(int& position, const vec_str& tokenizedOutput) {
             if (tokenizedOutput[position] == "+") {
-                return {position + 1, true};
+                position++;
+                return;
             }
-            return {position, false};
+            raise("Expected '+' symbol.");
         }
 
-        inline parser_rt _pequals_sym(int position, const vec_str &tokenizedOutput) {
+        inline void _pequals_sym(int& position, const vec_str& tokenizedOutput) {
             if (tokenizedOutput[position] == "=") {
-                return {position + 1, true};
+                position++;
+                return;
             }
-            return {position, false};
+            raise("Expected '=' symbol.");
+        }
+
+        inline void _psemicolon_sym(int& position, const vec_str& tokenizedOutput) {
+            if (tokenizedOutput[position] == ";") {
+                position++;
+                return;
+            }
+            raise("Expected ';' symbol.");
         }
     }
 
-    namespace custom {
-        // for later...
+    namespace ascii {
+        inline void _pint(int& position, const vec_str& tokenizedOutput) {
+            /* check if the token is an integer */
+            for (const char c : tokenizedOutput[position]) {
+                if (!isdigit(c)) {
+                    raise("Expected integer.");
+                }
+            }
+            position++;
+        }
+
+        inline void isalnum(int& position, const vec_str& tokenizedOutput) {
+            /* check if the token is an integer */
+            if (std::string str = tokenizedOutput[position]; std::ranges::all_of(str, ::isalnum)) {
+                position++;
+                return;
+            }
+            raise("Expected alphanumeric.");
+        }
+    }
+
+    namespace abstract {
+        inline void _ptype(int& position, const vec_str& tokenizedOutput, const vec_str& types) {
+            // get type
+            if (const std::string& type = tokenizedOutput[position]; std::ranges::find(types, type) != types.end()) {
+                position++;
+                return;
+            }
+            raise("Expected type.");
+        }
     }
 }

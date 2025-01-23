@@ -18,9 +18,10 @@ jobs:
       - name: Set up Python and GCC
         run: |
           sudo apt-get update
-          sudo apt-get install -y g++ python3.12-dev
+          sudo apt-get install -y g++ python3.12-dev cmake
 
       - name: Compile using g++ with Python 3.12
         working-directory: ./cvast
+        # g++ -g -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12
         run: |
-          g++ -g -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12
+          cmake --build ../cmake_build_debug --target Vast -j 8
