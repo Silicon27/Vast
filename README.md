@@ -1,13 +1,13 @@
 [![Discord](https://img.shields.io/badge/Discord-gray?style=flat-square&logo=discord&link=https://discord.gg/dDDrjSuxcg)](https://discord.gg/dDDrjSuxcg)
 
-
-![CVast Build Status](https://github.com/Silicon27/Vast/actions/workflows/build.yml/badge.svg)
-
-
 # Vast Programming Language
 
 > [!WARNING]\
 > Outdated README.md file. Please refer to [CVast++ Documentation](cvast/README.md) or the [Conventions](cvast/CONVENTIONS.md) file for the most up-to-date information.
+
+
+> [!NOTE]\
+> To refer to CVast, please refer to the [CVast++ Documentation](cvast/README.md) file.
 
 Vast is a programming language that is syntactically similar to python.
 

@@ -1,26 +1,52 @@
-name: Build main.cpp in cvast
+#name: Build main.cpp in cvast
+#
+#on:
+#  push:
+#  pull_request:
+#    paths:
+#      - cvast/main.cpp
+#  workflow_dispatch:
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#
+#      - name: Set up GCC and Python 3.12
+#        run: |
+#          sudo apt-get update
+#          sudo apt-get install -y g++-11 python3.12-dev
+#
+#      - name: Compile using g++ with Python 3.12
+#        working-directory: ./cvast
+#        run: |
+#          g++-11 -std=c++20 -g -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12 -lstdc++
+
+
+name: CVast CI
 
 on:
+  schedule:
+    - cron: "0 2 * * 1-5"
   push:
   pull_request:
-    paths:
-      - cvast/main.cpp
-  workflow_dispatch:
+    branches: [ "main" ]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up GCC and Python 3.12
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y g++-11 python3.12-dev
-
-      - name: Compile using g++ with Python 3.12
-        working-directory: ./cvast
-        run: |
-          g++-11 -std=c++20 -g -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12 -lstdc++
+      - uses: actions/checkout@v4
+      - name: configure
+        run: ./configure
+      - name: make
+        run: make
+      - name: make check
+        run: make check
+      - name: make distcheck
+        run: make distcheck

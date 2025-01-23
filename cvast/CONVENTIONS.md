@@ -22,6 +22,13 @@ using parser_rt = std::tuple<int, bool>;
 Remember all these aliases as they are used frequently throughout the codebase (we obligate that you use these over writing out the entire type).
 
 ---
+### Versions
+
+Follows this sematic: `v${major}.${minor}.${patch}`
+
+Following the [Semantic Versioning](https://semver.org/) guidelines, the versioning of CVast++ is as follows:
+
+---
 ### `func_map`
 
 `func_map`, the map for functions, is of type: `std::map<std::string, vec_str>`. This map is used to store the function name, return and argument types.
