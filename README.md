@@ -2,9 +2,16 @@
 
 # Vast Programming Language
 
+> [!WARNING]\
+> Outdated README.md file. Please refer to [CVast++ Documentation](cvast/README.md) or the [Conventions](cvast/CONVENTIONS.md) file for the most up-to-date information.
+
+
+> [!NOTE]\
+> To refer to CVast, please refer to the [CVast++ Documentation](cvast/README.md) file.
+
 Vast is a programming language that is syntactically similar to python.
 
-It is an interpreted and dynamically typed programming language.
+It is an interpreted and statically (dynamic typing implementation comming to CVast later this year) typed programming language.
 
 Vast (as of currently) has **21** keywords, but as development continues, this number may be subject to change.
 - - -
