@@ -6,7 +6,7 @@
 
 # Vast Programming Language
 
-> !WARNING Outdated!!!
+> [!WARNING] Outdated!!!
 
 Vast is a programming language that is syntactically similar to python.
 
