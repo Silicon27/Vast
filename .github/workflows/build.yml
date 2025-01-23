@@ -24,29 +24,3 @@
 #        working-directory: ./cvast
 #        run: |
 #          g++-11 -std=c++20 -g -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12 -lstdc++
-
-
-name: CVast CI
-
-on:
-  schedule:
-    - cron: "0 2 * * 1-5"
-  push:
-  pull_request:
-    branches: [ "main" ]
-
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: configure
-        run: ./configure
-      - name: make
-        run: make
-      - name: make check
-        run: make check
-      - name: make distcheck
-        run: make distcheck
