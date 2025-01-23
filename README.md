@@ -6,7 +6,8 @@
 
 # Vast Programming Language
 
-> [!WARNING] Outdated!!!
+> [!WARNING]\
+> Outdated README.md file. Please refer to [CVast++ Documentation](cvast/README.md) or the [Conventions](cvast/CONVENTIONS.md) file for the most up-to-date information.
 
 Vast is a programming language that is syntactically similar to python.
 
