@@ -10,9 +10,8 @@ using vec_str = std::vector<std::string>;
 #include <map>
 #include <string>
 #include <vector>
-#include "headers/runner.h"
 #include "headers/constants.h"
-
+#include "headers/runner.h"
 
 int main(int argc, char *argv[]) {
     // Define inputs
@@ -24,8 +23,8 @@ int main(int argc, char *argv[]) {
     };
     const std::vector<std::string> symbols = {
       "[>]", "[?]", "[.]",
-      "<=", ">=", "==", "!=", "&&", "||", "++", "--", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "~=", "<<", ">>", 
-      "(", ")", "{", "}", "<", ">", "=", "+", "-", "*", "/", "%", "!", "&", "|", "^", "~", ":", ";", ",", ".", "?", "@", "#", "$", "_"
+      "<=", ">=", "==", "!=", "&&", "||", "++", "--", "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", "~=", "<<", ">>", "->",
+      "(", ")", "{", "}", "<", ">", "=", "+", "-", "*", "/", "%", "!", "&", "|", "^", "~", ":", ";", ",", ".", "?", "@", "#", "$",
     };
     const std::string filePath = argv[1]; 
 

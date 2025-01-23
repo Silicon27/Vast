@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "constants.h"
+#include "parsers.h"
 
 class Runner {
 private:
@@ -30,8 +30,24 @@ public:
     {
     }
 
+    // define the functions for each of the keywords
+    int _var(int position) {
+        /*
+         * var int a = 10;
+         *
+         * var h
+         */
+
+        return position
+    }
+    int _func(int position);
+    int _if(int position);
+    int _elif(int position);
+    int _else(int position);
+
+
     // The run method
-    void run() {
+    void run(int position = 0) {
         for (int i = 0; i < tokenizedOutput.size(); i++) {
             std::cout << tokenizedOutput[i] << std::endl;
 
@@ -53,5 +69,9 @@ public:
 
     void setTokenizedDict(const std::vector<std::map<std::string, std::string>>& dict) { tokenizedDict = dict; }
     const std::vector<std::map<std::string, std::string>>& getTokenizedDict() const { return tokenizedDict; }
+
+    int _var(int position) {
+        return 0;
+    }
 };
 

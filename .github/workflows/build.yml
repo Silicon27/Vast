@@ -24,7 +24,3 @@ jobs:
         working-directory: ./cvast
         run: |
           g++ -g -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12
-
-      - name: Run the compiled program (Optional)
-        working-directory: ./cvast
-        run: ./main
