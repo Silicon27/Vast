@@ -23,4 +23,4 @@ jobs:
       - name: Compile using g++ with Python 3.12
         working-directory: ./cvast
         run: |
-          g++ -g -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12
+          g++ -g -std=c++20 -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12
