@@ -29,12 +29,18 @@ public:
         Py_Initialize();
 
         // Add the root path to sys.path
-        PyObject *sysPath = PySys_GetObject("path");
-        PyObject *path = PyUnicode_FromString("/Users/silicon/PycharmProjects/Vast"); // Get dynamically
-        PyList_Append(sysPath, path);
-        Py_DECREF(path);
+        // PyObject *sysPath = PySys_GetObject("path");
+        // PyObject *path = PyUnicode_FromString("/Users/silicon/PycharmProjects/Vast"); // Get dynamically
+        // PyList_Append(sysPath, path);
+        // Py_DECREF(path);
 
         // Import the Python module
+        PyRun_SimpleString(
+            "import sys\n"
+            "import os\n"
+            "sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))"
+        );
+
         PyObject *pModule = PyImport_ImportModule("tokenize_lexer");
         if (!pModule) {
             PyErr_Print();
