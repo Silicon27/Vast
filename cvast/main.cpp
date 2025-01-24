@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <ranges>
+#include <fstream>
 
 
 // store all values as strings for variables, that is, if it's an array, then it's "[1,2,3]",
@@ -34,10 +35,37 @@ int main(int argc, char *argv[]) {
         "INT", "FLOAT", "STRING", "BOOL", "ARRAY", "DICT", "TUPLE", "SET", "FILE", "CLASS", "FUNCTION", "MODULE"
     };
 
-    const std::string filePath = argv[1]; 
+    if (argc > 4) {
+        std::cerr << "Error: Too many arguments. Usage: vast <input_file> -o <output_file>" << std::endl;
+        return 1;
+    }
+
+    std::string input_file;
+    std::string output_file;
+
+    for (int i = 1; i < argc; i++) {
+        if (std::string(argv[i]) == "-o") {
+            // Ensure there is an argument after "-o"
+            if (i + 1 < argc) {
+                output_file = argv[i + 1];
+                i++; // Skip next argument as it's the output file
+            } else {
+                std::cerr << "Error: No output file specified after '-o'" << std::endl;
+                return 1;
+            }
+        } else if (input_file.empty()) {
+            // Assume it's the input file if input_file not already set
+            input_file = argv[i];
+        } else {
+            // Any additional argument not following the "-o" pattern is invalid
+            std::cerr << "Error: Unexpected argument '" << argv[i] << "'" << std::endl;
+            return 1;
+        }
+    }
+
 
     // Call the PythonTokenizer class
-    const PythonTokenizer tokenizer(keywords, tokens, symbols, filePath);
+    const PythonTokenizer tokenizer(keywords, tokens, symbols, input_file);
 
     vec_str tokenizedOutputWithSpaces;
     std::vector<std::map<std::string, std::string>> tokenizedDict;
@@ -57,7 +85,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Create a Runner object
-    Runner runner(var_map, func_map, tokenizedOutput, tokenizedOutputWithSpaces, tokenizedDict, types);
+    Runner runner(var_map, func_map, tokenizedOutput, tokenizedOutputWithSpaces, tokenizedDict, types, output_file);
 
     runner.run();
 

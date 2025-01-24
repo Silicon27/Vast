@@ -4,7 +4,10 @@
 
 #pragma once
 
+#include <utility>
+
 #include "parsers.h"
+#include "toasm.h"
 
 class Runner {
 private:
@@ -14,6 +17,7 @@ private:
     vec_str tokenizedOutputWithSpaces;
     std::vector<std::map<std::string, std::string>> tokenizedDict;
     vec_str types;
+    std::fstream output_file;
 
 public:
     // Constructor to initialize member variables if needed
@@ -23,13 +27,15 @@ public:
         vec_str   tokenOutput = {},
         vec_str  tokenOutputWithSpaces = {},
         const std::vector<std::map<std::string, std::string>>& tokenDict = {},
-        vec_str  types = {})
+        vec_str  types = {},
+        std::string  outputFile = "")
         : var_map(varMap),
           func_map(funcMap),
           tokenizedOutput(std::move(tokenOutput)),
           tokenizedOutputWithSpaces(std::move(tokenOutputWithSpaces)),
           tokenizedDict(tokenDict),
-          types(std::move(types))
+          types(std::move(types)),
+          output_file(outputFile)
     {
     }
 

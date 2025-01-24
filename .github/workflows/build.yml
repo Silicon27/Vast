@@ -24,3 +24,28 @@
 #        working-directory: ./cvast
 #        run: |
 #          g++-11 -std=c++20 -g -I/usr/include/python3.12 main.cpp -o main -L/usr/lib -lpython3.12 -lstdc++
+
+name: MacOS Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-vast:
+    runs-on: macos-latest
+
+    steps:
+      # Checkout the repo
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Run the provided commands
+      - name: Run Vast
+        run: |
+          cd cmake-build-debug
+          ./Vast ../examples/cvast/test/test.cv
