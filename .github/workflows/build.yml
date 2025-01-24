@@ -29,8 +29,6 @@ name: MacOS Workflow
 
 on:
   push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
