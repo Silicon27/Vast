@@ -12,8 +12,11 @@ jobs:
 
     steps:
       # Checkout the repository
-      - name: Checkout Repository
+      - name: Checkout Repository v1.1.1
         uses: actions/checkout@v3
+        with:
+          repository: Silicon27/Vast
+          ref: v1.1.1
 
       # Run the provided commands
       - name: Export the repo
@@ -22,7 +25,7 @@ jobs:
           cd ..
           ls
           pwd
-          export PYTHONPATH=/Users/runner/work/Vast/Vast/VastPy:$PYTHONPATH
+          export PYTHONPATH=/Users/runner/work/Vast/Vast/:$PYTHONPATH
           cd Vast
 
       - name: Run Vast
