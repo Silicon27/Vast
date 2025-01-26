@@ -28,20 +28,8 @@ public:
         // Initialize the Python interpreter
         Py_Initialize();
 
-        // Add the root path to sys.path
-        // PyObject *sysPath = PySys_GetObject("path");
-        // PyObject *path = PyUnicode_FromString("/Users/silicon/PycharmProjects/Vast"); // Get dynamically
-        // PyList_Append(sysPath, path);
-        // Py_DECREF(path);
+        PyObject *pModule = PyImport_ImportModule("VastPy.tokenize_lexer");
 
-        // Import the Python module
-        PyRun_SimpleString(
-            "import sys\n"
-            "import os\n"
-            "sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..')))"
-        );
-
-        PyObject *pModule = PyImport_ImportModule("tokenize_lexer");
         if (!pModule) {
             PyErr_Print();
             throw std::runtime_error("Failed to import module 'tokenize_lexer'.");

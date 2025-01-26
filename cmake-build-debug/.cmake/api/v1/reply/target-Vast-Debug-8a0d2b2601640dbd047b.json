@@ -121,13 +121,6 @@
 			[
 				0
 			]
-		},
-		{
-			"name" : "Header Files",
-			"sourceIndexes" : 
-			[
-				1
-			]
 		}
 	],
 	"sources" : 
@@ -137,11 +130,6 @@
 			"compileGroupIndex" : 0,
 			"path" : "cvast/main.cpp",
 			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"path" : "cvast/headers/PythonTokenizer.h",
-			"sourceGroupIndex" : 1
 		}
 	],
 	"type" : "EXECUTABLE"

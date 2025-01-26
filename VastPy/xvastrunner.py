@@ -1,4 +1,4 @@
-from xvast_lexer import convert_to_token
+from VastPy.xvast_lexer import convert_to_token
 keywords = ["runfile", "export"]
 tokens = ["RUNFILE", "EXPORT"]
 
@@ -44,6 +44,6 @@ class xvast:
 
 
 
-get_file("config.xvast")
+get_file("../config.xvast")
 xvast = xvast(tokenized_output)
 xvast.xvast_run()

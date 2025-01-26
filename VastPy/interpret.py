@@ -1,6 +1,6 @@
 import os
 import sys
-from tokenize_lexer import ConvertToToken
+from VastPy.tokenize_lexer import ConvertToToken
 from handlers import handle_string
 from handlers import handle_conditions
 from handlers import handle_curly_braces
@@ -10,7 +10,7 @@ from handlers import scope_handler
 debug_mode: bool = False
 
 # Read the config file to get the file name
-with open("config.xvast") as config_file:
+with open("../config.xvast") as config_file:
     for line in config_file:
         line = line.replace(" ", "")
         if "runfile:" in line:

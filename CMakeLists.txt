@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(Vast
     cvast/main.cpp
-        cvast/headers/PythonTokenizer.h)
+)
 
 include_directories(/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13)
 

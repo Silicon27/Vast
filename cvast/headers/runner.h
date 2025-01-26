@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <utility>
-
 #include "parsers.h"
 #include "toasm.h"
 
@@ -17,7 +15,6 @@ private:
     vec_str tokenizedOutputWithSpaces;
     std::vector<std::map<std::string, std::string>> tokenizedDict;
     vec_str types;
-    std::fstream output_file;
 
 public:
     // Constructor to initialize member variables if needed
@@ -28,15 +25,17 @@ public:
         vec_str  tokenOutputWithSpaces = {},
         const std::vector<std::map<std::string, std::string>>& tokenDict = {},
         vec_str  types = {},
-        std::string  outputFile = "")
+        const std::string&  outputFile = "")
         : var_map(varMap),
           func_map(funcMap),
           tokenizedOutput(std::move(tokenOutput)),
           tokenizedOutputWithSpaces(std::move(tokenOutputWithSpaces)),
           tokenizedDict(tokenDict),
-          types(std::move(types)),
-          output_file(outputFile)
+          types(std::move(types))
     {
+        if (!outputFile.empty()) {
+            initializeOutputFile(outputFile);
+        }
     }
 
     // define the functions for each of the keywords
@@ -72,6 +71,9 @@ public:
 
         // store the variable in the map
         var_map[var_name] = {var_type, var_value};
+
+        // !NOTE: this is a test, will be removed later
+        toasm::dmov::_pmov("x20", "x21");
 
         return pos;
     }

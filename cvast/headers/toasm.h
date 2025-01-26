@@ -4,6 +4,18 @@
 
 #pragma once
 
+inline std::fstream output;
+
+inline void initializeOutputFile(const std::string& filename) {
+    if (output.is_open()) {
+        output.close();  // Close any previously opened file
+    }
+    output.open(filename, std::ios::out | std::ios::app);  // Open in append mode
+    if (!output.is_open()) {
+        throw std::runtime_error("Failed to open the file: " + filename);
+    }
+}
+
 namespace toasm {
     namespace directives {
         // Directives
@@ -11,6 +23,14 @@ namespace toasm {
 
     namespace dmov {
         // Data movement instructions
+
+        // mov
+        // add to the output file without the use of a function
+        inline void _pmov(const std::string& from, const std::string& to) {
+            output << "mov " << from << ", " << to << std::endl;
+        }
+
+
     }
 
     namespace arith {
