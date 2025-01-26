@@ -22,7 +22,7 @@ jobs:
           cd ..
           ls
           pwd
-          export PYTHONPATH=/Users/runner/work/Vast/Vast:$PYTHONPATH
+          export PYTHONPATH=/Users/runner/work/Vast/Vast/VastPy:$PYTHONPATH
           cd Vast
 
       - name: Run Vast
