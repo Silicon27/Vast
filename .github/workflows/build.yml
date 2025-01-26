@@ -18,6 +18,7 @@ jobs:
       # Run the provided commands
       - name: Export the repo
         run: |
+          ls
           export PYTHONPATH=~/Vast:$PYTHONPATH
 
       - name: Run Vast
