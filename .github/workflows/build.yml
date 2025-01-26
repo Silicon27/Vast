@@ -20,6 +20,8 @@ jobs:
         run: |
           ls
           cd ..
+          ls
+          pwd
           export PYTHONPATH=~/Vast:$PYTHONPATH
           cd Vast
 
