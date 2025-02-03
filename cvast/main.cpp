@@ -3,6 +3,8 @@
 #include <string>
 #include <ranges>
 #include <fstream>
+#include <sstream>
+#include <filesystem>
 
 
 // store all values as strings for variables, that is, if it's an array, then it's "[1,2,3]",
@@ -15,14 +17,16 @@ using vec_str = std::vector<std::string>;
 #include <vector>
 #include "headers/constants.h"
 #include "headers/runner.h"
+#include "headers/preprocessor.h"
 
 int main(int argc, char *argv[]) {
+
     // Define inputs
     const std::vector<std::string> keywords = {
-        "print", "create", "expand", "export", "declare", "if", "var", "int"
+        "expand", "export", "if", "var", "i16", "i32", "i64", "out", "fn", "return"
     };
     const std::vector<std::string> tokens = {
-        "PRINT","CREATE", "EXPAND", "EXPORT", "DECLARE", "IF", "VAR", "INT"
+        "EXPAND", "EXPORT", "IF", "VAR", "I16", "I32", "I64", "OUT", "FN", "RETURN"
     };
     const std::vector<std::string> symbols = {
       "[>]", "[?]", "[.]",
@@ -31,7 +35,7 @@ int main(int argc, char *argv[]) {
     };
 
     vec_str types = {
-        "INT", "FLOAT", "STRING", "BOOL", "ARRAY", "DICT", "TUPLE", "SET", "FILE", "CLASS", "FUNCTION", "MODULE"
+        "I16", "I32", "I64", "FLOAT", "STRING", "BOOL", "ARRAY", "DICT", "TUPLE", "SET", "FILE", "CLASS", "FUNCTION", "MODULE"
     };
 
     if (argc > 4) {
@@ -62,6 +66,12 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    // Perform preprocessing
+    Preprocessor preprocessor(input_file);
+    std::string import_appends = preprocessor.preprocess();
+
+    std::cout << input_file << std::endl;
+
 
     // Call the PythonTokenizer class
     const PythonTokenizer tokenizer(keywords, tokens, symbols, input_file);
@@ -83,8 +93,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+
+
     // Create a Runner object
-    Runner runner(var_map, func_map, tokenizedOutput, tokenizedOutputWithSpaces, tokenizedDict, types, output_file);
+    Runner runner(var_map, func_map, tokenizedOutput, tokenizedOutputWithSpaces, tokenizedDict, types);
 
     runner.run();
 

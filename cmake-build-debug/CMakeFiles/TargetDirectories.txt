@@ -1,3 +1,9 @@
 /Users/silicon/PycharmProjects/Vast/cmake-build-debug/CMakeFiles/Vast.dir
+/Users/silicon/PycharmProjects/Vast/cmake-build-debug/CMakeFiles/intrinsics_gen.dir
+/Users/silicon/PycharmProjects/Vast/cmake-build-debug/CMakeFiles/omp_gen.dir
+/Users/silicon/PycharmProjects/Vast/cmake-build-debug/CMakeFiles/acc_gen.dir
+/Users/silicon/PycharmProjects/Vast/cmake-build-debug/CMakeFiles/ARMTargetParserTableGen.dir
+/Users/silicon/PycharmProjects/Vast/cmake-build-debug/CMakeFiles/AArch64TargetParserTableGen.dir
+/Users/silicon/PycharmProjects/Vast/cmake-build-debug/CMakeFiles/RISCVTargetParserTableGen.dir
 /Users/silicon/PycharmProjects/Vast/cmake-build-debug/CMakeFiles/edit_cache.dir
 /Users/silicon/PycharmProjects/Vast/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -2,7 +2,7 @@
 
 ## Description
 
-CVast++ is the official C++ implementation of the Vast Programming Language. It is a complete rewrite, which now instead of the previously slow and unstable interpreter, it has a fast and dependable compiler. The compiler is written in C++ and uses the LLVM library to generate the machine code. The language is syntactically similar to Python and is interpreted and dynamically typed.
+CVast++ is the official C++ implementation of the Vast Programming Language. It is a complete rewrite, which now instead of the previously slow and unstable interpreter, it has a fast and dependable compiler. The compiler is written in C++ and uses the LLVM library to generate the machine code.
 
 Vast is a set of programming languages following the same syntax. It is meant to give the programmer utmost freedom when coding, allowing customization previously unseen in other languages. The language is still in development, and as such, the number of keywords may change.
 
@@ -23,6 +23,13 @@ nano ~/.bashrc
 export PYTHONPATH=~/Vast:$PYTHONPATH
 alias vast=~/Vast/cmake-build-debug/Vast
 ```
+Also add the `stdlib` to the path
+```bash
+export CVASTSTDLIB="$HOME/Vast/cvast/stdlib/"
+```
+> [!WARNING]\
+> Path to stdlib may vary depending on installation zone, so just get the directory of [stdlib](stdlib) for you.
+
 > Exit the editor by pressing `Ctrl + X`, then `Y` and finally `Enter`
 
 > [!WARNING]\

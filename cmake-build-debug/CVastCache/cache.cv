@@ -1,0 +1,1 @@
+fn if_i0(this: i32, that: i32, hm: i32) -> i32 {    return 0;}fn add(a: i16, b: i16) -> i16 {    return a + b;}var i32 i = 6;fn if_i0() -> i32 {    return 0;}fn main() -> i32 {    if(i == 0){        if_i0();    }    return 0;}

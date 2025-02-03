@@ -1,0 +1,3 @@
+fn if_i0(this: i32, that: i32, hm: i32) -> i32 {
+    return 0;
+}
