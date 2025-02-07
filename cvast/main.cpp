@@ -23,10 +23,10 @@ int main(int argc, char *argv[]) {
 
     // Define inputs
     const std::vector<std::string> keywords = {
-        "expand", "export", "if", "var", "i16", "i32", "i64", "out", "fn", "return"
+        "expand", "export", "if", "var", "i16", "i32", "i64", "fn", "return"
     };
     const std::vector<std::string> tokens = {
-        "EXPAND", "EXPORT", "IF", "VAR", "I16", "I32", "I64", "OUT", "FN", "RETURN"
+        "EXPAND", "EXPORT", "IF", "VAR", "I16", "I32", "I64", "FN", "RETURN"
     };
     const std::vector<std::string> symbols = {
       "[>]", "[?]", "[.]",
@@ -99,6 +99,8 @@ int main(int argc, char *argv[]) {
     Runner runner(var_map, func_map, tokenizedOutput, tokenizedOutputWithSpaces, tokenizedDict, types);
 
     runner.run();
+
+    irgen.emitBinary();
 
 
     return 0;

@@ -58,5 +58,7 @@ inline parser_rt _pequals_sym(int position, const vec_str &tokenizedOutput) {
 }
 ```
 
+---
+### Standard Attributes
 
-
+CVast codebase uses Standard Attributes provided by C++20. These attributes are used to provide additional information to the compiler to help optimize the code. 

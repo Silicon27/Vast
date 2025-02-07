@@ -52,7 +52,7 @@ build cmake_object_order_depends_target_Vast: phony || .
 build CMakeFiles/Vast.dir/cvast/main.cpp.o: CXX_COMPILER__Vast_unscanned_Debug /Users/silicon/PycharmProjects/Vast/cvast/main.cpp || cmake_object_order_depends_target_Vast
   DEP_FILE = CMakeFiles/Vast.dir/cvast/main.cpp.o.d
   FLAGS = -g -std=gnu++20 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk -fcolor-diagnostics   -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
-  INCLUDES = -I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13 -I/opt/homebrew/include
+  INCLUDES = -I/opt/homebrew/opt/llvm/include -I/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13 -isystem /opt/homebrew/include
   OBJECT_DIR = CMakeFiles/Vast.dir
   OBJECT_FILE_DIR = CMakeFiles/Vast.dir/cvast
 
@@ -64,10 +64,10 @@ build CMakeFiles/Vast.dir/cvast/main.cpp.o: CXX_COMPILER__Vast_unscanned_Debug /
 #############################################
 # Link the executable Vast
 
-build Vast: CXX_EXECUTABLE_LINKER__Vast_Debug CMakeFiles/Vast.dir/cvast/main.cpp.o | /opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib/libpython3.13.dylib
+build Vast: CXX_EXECUTABLE_LINKER__Vast_Debug CMakeFiles/Vast.dir/cvast/main.cpp.o | /opt/homebrew/opt/llvm/lib/libLLVMTargetParser.a /opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib/libpython3.13.dylib /opt/homebrew/opt/llvm/lib/libLLVMSupport.a /opt/homebrew/lib/libz3.dylib /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/libz.tbd /opt/homebrew/lib/libzstd.dylib /opt/homebrew/opt/llvm/lib/libLLVMDemangle.a
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk
   LINK_FLAGS = -L/opt/homebrew/opt/llvm/lib -L/opt/homebrew/opt/llvm/lib -Wl,-rpath,/opt/homebrew/opt/llvm/lib -lLLVM
-  LINK_LIBRARIES = /opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib/libpython3.13.dylib
+  LINK_LIBRARIES = /opt/homebrew/opt/llvm/lib/libLLVMTargetParser.a  /opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib/libpython3.13.dylib  /opt/homebrew/opt/llvm/lib/libLLVMSupport.a  -lm  /opt/homebrew/lib/libz3.dylib  /Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/libz.tbd  /opt/homebrew/lib/libzstd.dylib  /opt/homebrew/opt/llvm/lib/libLLVMDemangle.a
   OBJECT_DIR = CMakeFiles/Vast.dir
   POST_BUILD = :
   PRE_LINK = :

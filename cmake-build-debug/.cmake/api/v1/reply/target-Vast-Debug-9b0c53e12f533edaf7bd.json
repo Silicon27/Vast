@@ -12,12 +12,17 @@
 		[
 			"add_executable",
 			"target_link_libraries",
+			"set_target_properties",
+			"include",
+			"find_package",
 			"include_directories",
 			"target_include_directories"
 		],
 		"files" : 
 		[
-			"CMakeLists.txt"
+			"CMakeLists.txt",
+			"/opt/homebrew/opt/llvm/lib/cmake/llvm/LLVMExports.cmake",
+			"/opt/homebrew/opt/llvm/lib/cmake/llvm/LLVMConfig.cmake"
 		],
 		"nodes" : 
 		[
@@ -33,23 +38,61 @@
 			{
 				"command" : 1,
 				"file" : 0,
+				"line" : 23,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
 				"line" : 31,
 				"parent" : 0
 			},
 			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 15,
+				"parent" : 0
+			},
+			{
+				"file" : 2,
+				"parent" : 4
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 349,
+				"parent" : 5
+			},
+			{
+				"file" : 1,
+				"parent" : 6
+			},
+			{
 				"command" : 2,
+				"file" : 1,
+				"line" : 1320,
+				"parent" : 7
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 64,
+				"parent" : 7
+			},
+			{
+				"command" : 5,
 				"file" : 0,
 				"line" : 17,
 				"parent" : 0
 			},
 			{
-				"command" : 2,
+				"command" : 5,
 				"file" : 0,
 				"line" : 27,
 				"parent" : 0
 			},
 			{
-				"command" : 3,
+				"command" : 6,
 				"file" : 0,
 				"line" : 35,
 				"parent" : 0
@@ -68,15 +111,16 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 3,
+					"backtrace" : 10,
 					"path" : "/opt/homebrew/opt/llvm/include"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 11,
 					"path" : "/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/include/python3.13"
 				},
 				{
-					"backtrace" : 5,
+					"backtrace" : 12,
+					"isSystem" : true,
 					"path" : "/opt/homebrew/include"
 				}
 			],
@@ -110,7 +154,42 @@
 			},
 			{
 				"backtrace" : 2,
+				"fragment" : "/opt/homebrew/opt/llvm/lib/libLLVMTargetParser.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 3,
 				"fragment" : "/opt/homebrew/opt/python@3.13/Frameworks/Python.framework/Versions/3.13/lib/libpython3.13.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 8,
+				"fragment" : "/opt/homebrew/opt/llvm/lib/libLLVMSupport.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "/opt/homebrew/lib/libz3.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "/Library/Developer/CommandLineTools/SDKs/MacOSX15.2.sdk/usr/lib/libz.tbd",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "/opt/homebrew/lib/libzstd.dylib",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 9,
+				"fragment" : "/opt/homebrew/opt/llvm/lib/libLLVMDemangle.a",
 				"role" : "libraries"
 			}
 		],

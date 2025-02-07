@@ -4,11 +4,14 @@
 
 #pragma once
 
-#include <utility>
+struct Variable {
+    std::string name;
+    std::string type;
+    std::string value;
+};
 
 #include "parsers.h"
 #include "irgen.h"
-#include <stack>
 
 inline IRGenerator irgen("__main__");
 
@@ -42,7 +45,7 @@ public:
     {
     }
 
-    static int getScope(int pos, const vec_str& tokenizedOutput) {
+    static int getScope(const int pos, const vec_str& tokenizedOutput) {
         int inScope = 0;
         for (int i = pos; i < tokenizedOutput.size(); i++) {
             if (tokenizedOutput[i] == "{") {
@@ -54,7 +57,7 @@ public:
                 return i;
             }
         }
-        return {};
+        return pos;
     }
 
     // define the functions for each of the keywords
@@ -79,12 +82,19 @@ public:
 
         parsers::symbol::_pequals_sym(pos, tokenizedOutput); // =
 
+        std::string var_value;
+        llvm::Value* value;
         if (var_type == "I32") {
             parsers::ascii::_pint(pos, tokenizedOutput); // i32
+            var_value = tokenizedOutput[pos - 1];
+
+            value = llvm::ConstantInt::get(llvm::Type::getInt32Ty(irgen.Context), std::stoi(var_value));
+
         } else {
             raise("Expected '" + var_type + "' type.");
+            value = nullptr;
         }
-        const auto var_value = tokenizedOutput[pos - 1];
+
 
         parsers::symbol::_psemicolon_sym(pos, tokenizedOutput); // ;
 
@@ -96,7 +106,7 @@ public:
 
         // createModule();
 
-        irgen.createVariable(var_name, llvm::Type::getInt32Ty(irgen.Context), var_value, "global");
+        irgen.createVariable(var_name, llvm::Type::getInt32Ty(irgen.Context), value, scope);
 
         return --pos;
     }
@@ -110,20 +120,74 @@ public:
 
         parsers::keyword::_pfn(pos, tokenizedOutput); // fn
 
-        parsers::ascii::isalnum(pos, tokenizedOutput); // function name
-        const std::string funcName = tokenizedOutput[pos - 1];
+        const std::string funcName = parsers::ascii::isalnum_ret(pos, tokenizedOutput); // function name
 
         parsers::symbol::_popen_sym(pos, tokenizedOutput); // (
 
+        const int original_pos = pos;
+
         parsers::abstract::_poptional_matchAll(pos, tokenizedOutput,
             parsers::modifier::matchAll,
-            parsers::modifier::combine({parsers::ascii::isalnum, parsers::symbol::_pcolon_sym, parsers::abstract::_ptype, parsers::symbol::_pcomma_sym})); // arguments
+            parsers::modifier::combine(
+                {parsers::ascii::isalnum, parsers::symbol::_pcolon_sym,
+                    parsers::abstract::_ptype, parsers::symbol::_pcomma_sym})); // arguments
+
+
+        std::vector<Variable> arguments_list;
+        for (int i = original_pos; i < pos; i++) {
+            if (tokenizedOutput[i] == ")") {
+                break;
+            }
+            Variable var;
+
+            if (std::string str = tokenizedOutput[i];
+                std::ranges::all_of(str,
+                    [](const char c) { return std::isalnum(c) || c == '_'; })) {
+                i++;
+                var.name = str;
+            } else {
+                raise("Expected alphanumeric.");
+            }
+
+            if (tokenizedOutput[i] == ":") {
+                i++;
+            } else {
+                raise("Expected ':' symbol.");
+            }
+
+            if (tokenizedOutput[i] == "I32") {
+                i++;
+                var.type = "I32";
+            } else {
+                raise("Expected valid type.");
+            }
+
+            var.value = std::to_string(cvast::constants::Null::null);
+
+            arguments_list.push_back(var);
+        }
 
         parsers::symbol::_pclose_sym(pos, tokenizedOutput); // )
 
         parsers::symbol::_ppointer_sym(pos, tokenizedOutput); // ->
 
-        parsers::abstract::_ptype(pos, tokenizedOutput); // return type
+        parsers::abstract::_ptype(pos, tokenizedOutput); // return typex
+
+        llvm::Type *returnType;
+        if (tokenizedOutput[pos - 1] == "I32") {
+            returnType = llvm::Type::getInt32Ty(irgen.Context);
+        } else {
+            raise("Expected valid return type.");
+        }
+
+        std::vector<llvm::Type*> argTypes;
+
+        argTypes.reserve(arguments_list.size());
+        for (const auto& arg : arguments_list) {
+            argTypes.push_back(arg.type == "I32" ? llvm::Type::getInt32Ty(irgen.Context) : nullptr);
+        }
+
+        irgen.createFunction(funcName, returnType, argTypes, arguments_list);
 
         const int scopeEnd = getScope(pos, tokenizedOutput);
 
@@ -131,18 +195,32 @@ public:
         const vec_str funcTokenizedOutputWithSpaces(tokenizedOutputWithSpaces.begin() + pos+1, tokenizedOutputWithSpaces.begin() + scopeEnd);
         const std::vector funcTokenizedDict(tokenizedDict.begin() + pos+1, tokenizedDict.begin() + scopeEnd);
 
-        for (const auto & i : funcTokenizedOutput) {
-            std::cout << "thing: " << i << std::endl;
-        }
-
-
         parsers::symbol::_popencurly_sym(pos, tokenizedOutput); // {
+        pos = scopeEnd;
 
         Runner runner(this->getVarMap(), this->getFuncMap(), funcTokenizedOutput, funcTokenizedOutputWithSpaces, funcTokenizedDict, this->types, funcName);
         runner.run();
 
+        parsers::symbol::_pclosecurly_sym(pos, tokenizedOutput); // }
+
+        irgen.dump();
+
         return --pos;
     }
+
+    int _return(int pos) {
+        parsers::keyword::_preturn(pos, tokenizedOutput); // return
+
+        parsers::ascii::_pint(pos, tokenizedOutput); // i32
+        std::string value = tokenizedOutput[pos - 1];
+
+        parsers::symbol::_psemicolon_sym(pos, tokenizedOutput); // ;
+
+        irgen.createReturn(llvm::ConstantInt::get(llvm::Type::getInt32Ty(irgen.Context), std::stoi(value)), scope);
+
+        return pos;
+    }
+
     int _if(int pos);
     int _elif(int pos);
     int _else(int pos);
@@ -151,7 +229,7 @@ public:
     // The run method
     void run() {
 
-        IRGenerator irgen("main");
+        IRGenerator irgen(scope);
         type = this->types;
 
         std::cout << "Running the code..." << std::endl;
@@ -162,12 +240,16 @@ public:
                 i = _var(i);
             } else if (tokenizedOutput[i] == "FN") {
                 i = _func(i);
+            } else if (tokenizedOutput[i] == "RETURN") {
+                i = _return(i);
             }
         }
 
         for (const auto& [key, value] : var_map) {
             std::cout << key << " : " << value[0] << " : " << value[1] << std::endl;
         }
+
+        irgen.validityCheck();
     }
 
     // Getter and Setter methods to manipulate internal data if required

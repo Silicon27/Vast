@@ -9,6 +9,15 @@ namespace cvast {
         // Constants for the project
         const std::string VER = "1.0.0";
         const std::string LICENSE = "MIT";
+
+        class Null {
+        private:
+            Null()= default;
+        public:
+            static int null;
+        };
+
+        int Null::null = 0;
     }
 
     namespace syntax {

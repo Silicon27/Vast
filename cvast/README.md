@@ -47,4 +47,31 @@ You can now run the `vast` command in your terminal to run the Vast Compiler.
 vast ~/Vast/examples/cvast/test/test.cv -o output.s
 ```
 
+---
+## Syntax
+
+CVast takes inspiration from Rust, C++, Python, and other languages. 
+
+A simple function for adding two numbers would look like this:
+```
+fn add(a: i32, b: i32) -> i32 {
+    return a + b;
+}
+```
+
+`var` is used to declare variables:
+
+```
+var a: i32 = 10;
+```
+
+`if` statements are similar to that of C++:
+
+```
+if (a == 10) {
+    return true;
+} else {
+    return false;
+}
+```
 

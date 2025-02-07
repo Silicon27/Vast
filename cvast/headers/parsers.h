@@ -35,6 +35,14 @@ namespace parsers {
             }
             raise("Expected 'fn' keyword.");
         }
+
+        inline void _preturn(int& position, const vec_str& tokenizedOutput) {
+            if (tokenizedOutput[position] == "RETURN") {
+                position++;
+                return;
+            }
+            raise("Expected 'return' keyword.");
+        }
     }
 
 
@@ -157,6 +165,17 @@ namespace parsers {
                 return;
             }
             raise("Expected alphanumeric.");
+        }
+
+        inline std::string isalnum_ret(int& position, const vec_str& tokenizedOutput) {
+            if (std::string str = tokenizedOutput[position];
+                std::ranges::all_of(str,
+                    [](const char c) { return std::isalnum(c) || c == '_'; })) {
+                position++;
+                return str;
+            }
+            raise("Expected alphanumeric.");
+            return "";
         }
     }
 

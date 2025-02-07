@@ -1,15 +1,7 @@
-@import "io.cv"
-@import "math.cv"
+var i32 x = 10;
 
-var i32 i = 6;
-
-fn if_i0() -> i32 {
+fn main(x: i32) -> i32 {
+    var i32 y = 10;
     return 0;
 }
 
-fn main() -> i32 {
-    if(i == 0){
-        if_i0();
-    }
-    return 0;
-}
