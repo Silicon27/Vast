@@ -12,6 +12,7 @@ struct Variable {
 
 #include "parsers.h"
 #include "irgen.h"
+#include "expr.h"
 
 inline IRGenerator irgen("__main__");
 
@@ -126,11 +127,22 @@ public:
 
         const int original_pos = pos;
 
-        parsers::abstract::_poptional_matchAll(pos, tokenizedOutput,
-            parsers::modifier::matchAll,
-            parsers::modifier::combine(
-                {parsers::ascii::isalnum, parsers::symbol::_pcolon_sym,
-                    parsers::abstract::_ptype, parsers::symbol::_pcomma_sym})); // arguments
+        // parsers::abstract::_poptional_matchAll(pos, tokenizedOutput,
+        //     parsers::modifier::matchAll,
+        //     parsers::modifier::combine(
+        //         {parsers::ascii::isalnum, parsers::symbol::_pcolon_sym,
+        //             parsers::abstract::_ptype, parsers::symbol::_pcomma_sym})); // arguments
+
+        // The argument list is optional inside the parentheses.
+        try {
+            // Try to consume an argument list.
+            parsers::abstract::_parg_list(pos, tokenizedOutput);
+        } catch (const std::exception& ex) {
+            // If no argument list is found, that's okay.
+            // No need to raise an error since it's optional.
+            std::cout << "No arguments found." << std::endl;
+        }
+
 
 
         std::vector<Variable> arguments_list;

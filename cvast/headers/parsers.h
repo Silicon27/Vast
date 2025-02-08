@@ -163,7 +163,7 @@ namespace parsers {
                     [](const char c) { return std::isalnum(c) || c == '_'; })) {
                 position++;
                 return;
-            }
+                    }
             raise("Expected alphanumeric.");
         }
 
@@ -173,7 +173,7 @@ namespace parsers {
                     [](const char c) { return std::isalnum(c) || c == '_'; })) {
                 position++;
                 return str;
-            }
+                    }
             raise("Expected alphanumeric.");
             return "";
         }
@@ -199,13 +199,56 @@ namespace parsers {
 
         inline void _poptional_matchAll(int& position, const vec_str& tokenizeOutput, const std::function<void(int&, const vec_str&, const parserType)>& func, const parserType& matchForFunc) {
             try {
-               func(position, tokenizeOutput, matchForFunc);
+                func(position, tokenizeOutput, matchForFunc);
             } catch (const std::runtime_error& e) {
                 // do nothing
             }
         }
-    }
 
+
+        inline void _parg(int& position, const vec_str& tokenizedOutput) {
+            // get arguments
+            /* Following the syntax:
+            * argument -> expression
+            * argument_list -> expression (',' expression)*
+            *
+            * function_args -> '(' argument_list? ')'
+            */
+            ascii::isalnum(position, tokenizedOutput);
+            symbol::_pcolon_sym(position, tokenizedOutput);
+            _ptype(position, tokenizedOutput);
+        }
+
+        inline void _parg_list(int& position, const vec_str& tokenizedOutput) {
+            // get arguments
+            /* Following the syntax:
+            * argument -> expression
+            * argument_list -> expression (',' expression)*
+            *
+            * function_args -> '(' argument_list? ')'
+            */
+            _parg(position, tokenizedOutput);
+
+            while (true) {
+                const int backup = position;
+
+                try {
+                    // Attempt to match a comma symbol.
+                    // Using your symbol parser for comma.
+                    symbol::_pcomma_sym(position, tokenizedOutput);
+
+                    // Then, match another argument.
+                    _parg(position, tokenizedOutput);
+                } catch (const std::exception& ex) {
+                    // If matching the comma or the following expression fails,
+                    // revert to the last valid position and exit the loop.
+                    position = backup;
+                    break;
+                }
+
+            }
+        }
+    }
     namespace modifier {
         inline void matchAll(int& position, const vec_str& tokenizedOutput, const parserType &func) {
             while (position < tokenizedOutput.size()) {
@@ -229,7 +272,6 @@ namespace parsers {
                     func(pos, tokenizedOutput);
                 }
             };
-
         }
     }
 }

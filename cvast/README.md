@@ -75,3 +75,14 @@ if (a == 10) {
 }
 ```
 
+---
+
+### Notes:
+
+Function arguments and arrays are parsed as such:
+```
+argument -> expression
+argument_list -> expression (',' expression)*
+
+function_args -> '(' argument_list? ')'
+```
