@@ -82,6 +82,8 @@ int main(int argc, char *argv[]) {
 
     std::map<std::string, vec_str> var_map = {};
     std::map<std::string, vec_str> func_map = {};
+    std::map<std::string, vec_str> func_args = {};
+    std::map<std::string, std::string> func_return = {};
 
     // store all the indexes where scopes start of var_map
     std::vector<int> scopeStarts;
@@ -96,12 +98,12 @@ int main(int argc, char *argv[]) {
 
 
     // Create a Runner object
-    Runner runner(var_map, func_map, tokenizedOutput, tokenizedOutputWithSpaces, tokenizedDict, types);
+    Runner runner(var_map, func_map, func_args, func_return, tokenizedOutput, tokenizedOutputWithSpaces, tokenizedDict, types);
 
     runner.run();
 
     irgen.emitBinary();
-
+    irgen.dump();
 
     return 0;
 }

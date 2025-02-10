@@ -20,6 +20,11 @@ class Runner {
 private:
     std::map<std::string, vec_str> var_map;
     std::map<std::string, vec_str> func_map;
+    /*
+     * func_map = {"funcName": {"return": ["I32"], "args": ["I32", "I32"]}}
+     */
+    std::map<std::string, vec_str> func_args;
+    std::map<std::string, std::string> func_return;
     vec_str tokenizedOutput;
     vec_str tokenizedOutputWithSpaces;
     std::vector<std::map<std::string, std::string>> tokenizedDict;
@@ -31,6 +36,8 @@ public:
     explicit Runner(
         const std::map<std::string, vec_str>& varMap = {},
         const std::map<std::string, vec_str>& funcMap = {},
+        const std::map<std::string, vec_str>& funcArgs = {},
+        const std::map<std::string, std::string>& funcReturn = {},
         vec_str   tokenOutput = {},
         vec_str  tokenOutputWithSpaces = {},
         const std::vector<std::map<std::string, std::string>>& tokenDict = {},
@@ -38,6 +45,8 @@ public:
         std::string scope = "global")
         : var_map(varMap),
           func_map(funcMap),
+          func_args(funcArgs),
+          func_return(funcReturn),
           tokenizedOutput(std::move(tokenOutput)),
           tokenizedOutputWithSpaces(std::move(tokenOutputWithSpaces)),
           tokenizedDict(tokenDict),
@@ -112,16 +121,17 @@ public:
         return --pos;
     }
 
-    [[nodiscard]] int _func(int pos) const {
+    [[nodiscard]] int _func(int pos) {
         /*
          * fn <int> add(int a, int b) {
          *   return a + b;
          * }
          */
+        const int func_start = pos;
 
         parsers::keyword::_pfn(pos, tokenizedOutput); // fn
 
-        const std::string funcName = parsers::ascii::isalnum_ret(pos, tokenizedOutput); // function name
+        std::string funcName = parsers::ascii::isalnum_ret(pos, tokenizedOutput); // function name
 
         parsers::symbol::_popen_sym(pos, tokenizedOutput); // (
 
@@ -210,12 +220,14 @@ public:
         parsers::symbol::_popencurly_sym(pos, tokenizedOutput); // {
         pos = scopeEnd;
 
-        Runner runner(this->getVarMap(), this->getFuncMap(), funcTokenizedOutput, funcTokenizedOutputWithSpaces, funcTokenizedDict, this->types, funcName);
+        Runner runner(this->getVarMap(), this->getFuncMap(),  this->getFuncArgs(), this->getFuncReturn(), funcTokenizedOutput, funcTokenizedOutputWithSpaces, funcTokenizedDict, this->types, funcName);
         runner.run();
 
         parsers::symbol::_pclosecurly_sym(pos, tokenizedOutput); // }
 
-        irgen.dump();
+        vec_str function_body = {tokenizedOutput.begin() + func_start, tokenizedOutput.begin() + pos};
+
+        func_map[funcName] = function_body;
 
         return --pos;
     }
@@ -223,14 +235,24 @@ public:
     int _return(int pos) {
         parsers::keyword::_preturn(pos, tokenizedOutput); // return
 
-        parsers::ascii::_pint(pos, tokenizedOutput); // i32
-        std::string value = tokenizedOutput[pos - 1];
+        // parsers::ascii::_pint(pos, tokenizedOutput); // i32
+        // const std::string value = tokenizedOutput[pos - 1];
+
+        Expr expr(this->var_map, this->func_map,
+            parsers::retParsers::_pparse_until(pos, tokenizedOutput, ";"), irgen, scope);
+
+        // llvm::CallInst* lastCall;
+        // std::string finalResult;
+        auto [lastCall, finalResult] = expr.eval();
+
+        irgen.createReturn(finalResult, scope);
+
 
         parsers::symbol::_psemicolon_sym(pos, tokenizedOutput); // ;
 
-        irgen.createReturn(llvm::ConstantInt::get(llvm::Type::getInt32Ty(irgen.Context), std::stoi(value)), scope);
+        // irgen.createReturn(llvm::ConstantInt::get(llvm::Type::getInt32Ty(irgen.Context), std::stoi(value)), scope);
 
-        return pos;
+        return --pos;
     }
 
     int _if(int pos);
@@ -270,6 +292,12 @@ public:
 
     void setFuncMap(const std::map<std::string, vec_str>& map) { func_map = map; }
     [[nodiscard]] const std::map<std::string, vec_str>& getFuncMap() const { return func_map; }
+
+    void setFuncArgs(const std::map<std::string, vec_str>& map) { func_args = map; }
+    [[nodiscard]] const std::map<std::string, vec_str>& getFuncArgs() const { return func_args; }
+
+    void setFuncReturn(const std::map<std::string, std::string>& map) { func_return = map; }
+    [[nodiscard]] const std::map<std::string, std::string>& getFuncReturn() const { return func_return; }
 
     void setTokenizedOutput(const vec_str& output) { tokenizedOutput = output; }
     [[nodiscard]] const vec_str& getTokenizedOutput() const { return tokenizedOutput; }

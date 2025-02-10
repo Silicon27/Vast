@@ -143,6 +143,54 @@ namespace parsers {
             raise("Expected '->' symbol.");
         }
 
+        inline void _pdquote_sym(int& position, const vec_str& tokenizedOutput) {
+            if (tokenizedOutput[position] == "\"") {
+                position++;
+                return;
+            }
+            raise("Expected '\"' symbol.");
+        }
+
+        inline void _pquote_sym(int& position, const vec_str& tokenizedOutput) {
+            if (tokenizedOutput[position] == "'") {
+                position++;
+                return;
+            }
+            raise("Expected ''' symbol.");
+        }
+
+        inline void _pbackslash_sym(int& position, const vec_str& tokenizedOutput) {
+            if (tokenizedOutput[position] == "\\") {
+                position++;
+                return;
+            }
+            raise("Expected '\\' symbol.");
+        }
+
+        inline void _pforwardslash_sym(int& position, const vec_str& tokenizedOutput) {
+            if (tokenizedOutput[position] == "/") {
+                position++;
+                return;
+            }
+            raise("Expected '/' symbol.");
+        }
+
+        inline void _pstar_sym(int& position, const vec_str& tokenizedOutput) {
+            if (tokenizedOutput[position] == "*") {
+                position++;
+                return;
+            }
+            raise("Expected '*' symbol.");
+        }
+
+        inline void _pampersand_sym(int& position, const vec_str& tokenizedOutput) {
+            if (tokenizedOutput[position] == "&") {
+                position++;
+                return;
+            }
+            raise("Expected '&' symbol.");
+        }
+
     }
 
     namespace ascii {
@@ -248,6 +296,7 @@ namespace parsers {
 
             }
         }
+
     }
     namespace modifier {
         inline void matchAll(int& position, const vec_str& tokenizedOutput, const parserType &func) {
@@ -272,6 +321,99 @@ namespace parsers {
                     func(pos, tokenizedOutput);
                 }
             };
+        }
+    }
+
+    namespace retParsers {
+        inline std::string _parg(int& position, const vec_str& tokenizedOutput) {
+            // get arguments
+            /* Following the syntax:
+            * argument -> expression
+            * argument_list -> expression (',' expression)*
+            *
+            * function_args -> '(' argument_list? ')'
+            */
+
+
+            ascii::isalnum(position, tokenizedOutput);
+            const std::string& value = tokenizedOutput[position - 1];
+
+            return value;
+        }
+
+        inline vec_str _parg_list(int& position, const vec_str& tokenizedOutput) {
+            // get arguments
+            /* Following the syntax:
+            * argument -> expression
+            * argument_list -> expression (',' expression)*
+            *
+            * function_args -> '(' argument_list? ')'
+            */
+            std::vector<std::string> args;
+            const std::string arg = _parg(position, tokenizedOutput);
+
+            args.push_back(arg);
+            while (true) {
+                const int backup = position;
+
+                try {
+                    // Attempt to match a comma symbol.
+                    // Using your symbol parser for comma.
+                    symbol::_pcomma_sym(position, tokenizedOutput);
+
+                    // Then, match another argument.
+                    std::string otherArg = _parg(position, tokenizedOutput);
+                    args.push_back(otherArg);
+                } catch (const std::exception& ex) {
+                    // If matching the comma or the following expression fails,
+                    // revert to the last valid position and exit the loop.
+                    position = backup;
+                    break;
+                }
+
+            }
+
+            return args;
+        }
+
+        inline vec_str _pparse_until(int& position, const vec_str& tokenizedOutput, const std::string& matchFor) {
+            vec_str toCapture = {};
+
+            while (tokenizedOutput[position] != matchFor) {
+                toCapture.push_back(tokenizedOutput[position]);
+                position++;
+            }
+            return toCapture;
+        }
+    }
+
+    namespace type {
+        inline std::string getString(int &position, const vec_str &tokenizedOutput) {
+            symbol::_pdquote_sym(position, tokenizedOutput);
+            std::string str;
+            for (int i = position; i < tokenizedOutput.size(); i++) {
+                if (tokenizedOutput[i] == "\"" && tokenizedOutput[i - 1] != "\\") {
+                    position = i;
+                    return str;
+                }
+                str += tokenizedOutput[i];
+            }
+            symbol::_pdquote_sym(position, tokenizedOutput);
+
+            return str;
+        }
+
+        inline std::string getType(int& position, const vec_str& tokenizedOutput) {
+            // get type
+            // check for which type the given values are
+
+            if (tokenizedOutput[position] == "\"") {
+                getString(position, tokenizedOutput);
+                return "string";
+            } else {
+                ascii::_pint(position, tokenizedOutput);
+                return "int";
+            }
         }
     }
 }
